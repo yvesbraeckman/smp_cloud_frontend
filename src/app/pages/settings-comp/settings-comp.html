@@ -1,0 +1,183 @@
+<app-sidebar></app-sidebar>
+
+<main class="main-content">
+    <div class="settings-wrapper">
+        <div class="profile-header">
+            <div class="avatar-circle">
+                {{ getInitials(myProfile.name) }}
+            </div>
+            <div class="profile-info">
+                <h2>{{ myProfile.name || 'Laden...' }}</h2>
+                <p>Systeembeheerder</p>
+            </div>
+        </div>
+
+        <div class="settings-grid">
+            
+            <div class="settings-column">
+                
+                <div class="settings-group">
+                    <div class="group-title">Persoonlijke Gegevens</div>
+                    <div class="settings-box">
+                        <div class="settings-row">
+                            <label>Naam</label>
+                            <input type="text" [(ngModel)]="myProfile.name" placeholder="Je volledige naam">
+                        </div>
+                        <div class="settings-row">
+                            <label>E-mailadres</label>
+                            <input type="email" [(ngModel)]="myProfile.email" placeholder="naam@domein.be">
+                        </div>
+                        <div class="settings-row">
+                            <label>Telefoon</label>
+                            <input type="tel" [(ngModel)]="myProfile.phone" placeholder="0400 00 00 00">
+                        </div>
+                        <div class="settings-footer">
+                            @if (profileMessage) { <span class="success-text">{{ profileMessage }}</span> }
+                            <button class="btn-save" (click)="saveProfile()" [disabled]="isSavingProfile">
+                                {{ isSavingProfile ? 'Opslaan...' : 'Bewaar profiel' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <div class="group-title">Beveiliging</div>
+                    <div class="settings-box">
+                        <div class="settings-row">
+                            <label>Huidig wachtwoord</label>
+                            <input type="password" [(ngModel)]="passwords.current" placeholder="••••••••">
+                        </div>
+                        <div class="settings-row">
+                            <label>Nieuw wachtwoord</label>
+                            <input type="password" [(ngModel)]="passwords.new" placeholder="••••••••">
+                        </div>
+                        <div class="settings-row">
+                            <label>Bevestig nieuw</label>
+                            <input type="password" [(ngModel)]="passwords.confirm" placeholder="••••••••">
+                        </div>
+                        <div class="settings-footer">
+                            @if (passwordMessage) { <span class="success-text">{{ passwordMessage }}</span> }
+                            @if (passwordError) { <span class="error-text">{{ passwordError }}</span> }
+                            <button class="btn-save" (click)="savePassword()" [disabled]="isSavingPassword">
+                                Wijzig wachtwoord
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-column">
+                <div class="settings-group">
+
+                        <div class="group-title-row">
+                            <div class="group-title">Beheerders ({{ admins.length }})</div>
+                            
+                            @if (myProfile.role === 'superadmin') {
+                                <button class="btn-icon-add" (click)="openAddAdminModal()" title="Nieuwe beheerder">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+                                </button>
+                            }
+                    </div>
+                    
+                    <div class="settings-box list-box">
+                        @if (isLoadingAdmins) {
+                            <div class="empty-state">Laden...</div>
+                        } @else if (admins.length === 0) {
+                            <div class="empty-state">Geen beheerders gevonden.</div>
+                        } @else {
+                            @for (admin of admins; track admin.id) {
+                                <div class="list-row">
+                                    <div class="list-info">
+                                        <div class="list-name">{{ admin.name }}</div>
+                                        <div class="list-sub">{{ admin.email }}</div>
+                                    </div>
+                                    <div class="list-actions">
+                                        <div class="list-actions">
+                                            <span class="role-badge" [class.super]="admin.role === 'superadmin'">
+                                                {{ admin.role === 'superadmin' ? 'Superadmin' : 'Admin' }}
+                                            </span>
+                                            
+                                            @if (myProfile.role === 'superadmin' && admin.id !== myProfile.id) {
+                                                <button class="btn-remove" (click)="deleteAdmin(admin)" title="Verwijderen">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                                </button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+@if (showAddModal) {
+    <div class="modal-overlay" (click)="closeModal()">
+        <div class="modal-box" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Nieuwe Beheerder</h3>
+                <button class="close-btn" (click)="closeModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                @if (adminErrorMessage) { <div class="error-banner">{{ adminErrorMessage }}</div> }
+
+                <div class="form-group">
+                    <label>Volledige naam</label>
+                    <input type="text" [(ngModel)]="newAdmin.name" placeholder="Naam">
+                </div>
+                <div class="form-group">
+                    <label>E-mailadres</label>
+                    <input type="email" [(ngModel)]="newAdmin.email" placeholder="E-mail">
+                </div>
+                <div class="form-group">
+                    <label>Rol</label>
+                    <select [(ngModel)]="newAdmin.role">
+                        <option value="admin">Beheerder (Admin)</option>
+                        <option value="superadmin">Hoofdbeheerder (Superadmin)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tijdelijk Wachtwoord</label>
+                    <input type="text" [(ngModel)]="newAdmin.password" placeholder="Wachtwoord">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" (click)="closeModal()">Annuleren</button>
+                <button class="btn-primary" (click)="submitNewAdmin()" [disabled]="isSavingNewAdmin">Voeg toe</button>
+            </div>
+        </div>
+    </div>
+}
+@if (showDeleteModal && adminToDelete) {
+    <div class="modal-overlay" (click)="cancelDeleteAdmin()">
+        <div class="modal-box-alert" (click)="$event.stopPropagation()">
+            
+            <div class="modal-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="currentColor">
+                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                </svg>
+            </div>
+            
+            <h3>Beheerder Verwijderen</h3>
+            <p>
+                Weet je zeker dat je beheerder <strong>{{ adminToDelete.name }}</strong> wilt verwijderen?<br>
+                Deze actie kan niet ongedaan worden gemaakt.
+            </p>
+            
+            <div class="modal-actions">
+                <button class="btn-cancel" (click)="cancelDeleteAdmin()" [disabled]="isDeletingAdmin">Annuleren</button>
+                <button class="btn-danger" (click)="confirmDeleteAdmin()" [disabled]="isDeletingAdmin">
+                    {{ isDeletingAdmin ? 'Verwijderen...' : 'Ja, verwijder' }}
+                </button>
+            </div>
+        </div>
+    </div>
+}
