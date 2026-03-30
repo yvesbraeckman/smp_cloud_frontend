@@ -1,59 +1,49 @@
-# Frontend
+# Smart Parcel Wall - Cloud Frontend 
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.2.
+Welkom bij het Cloud Dashboard van het **Smart Parcel Wall** project. Dit is de beheeromgeving (frontend) waarmee beheerders de slimme pakketmuren kunnen monitoren, configureren en bedienen via een intuïtieve, Apple-geïnspireerde interface.
 
-## Development server
+Dit project is naadloos gekoppeld aan de [Smart Parcel Wall Backend](https://github.com/yvesbraeckman/smp_cloud_backend) en functioneert als de besturingslaag voor de Digital Twin architectuur.
 
-To start a local development server, run:
+## Kernfuncties & Pagina's
 
-```bash
-ng serve
-```
+* **Authenticatie:** Beveiligde login (`login`), wachtwoord reset (`reset-password`), en route-beveiliging via Angular Guards en HTTP Interceptors.
+* **Fleet Overview:** Real-time overzicht van bezettingsgraden, actieve pakketten, en offline/online statussen van alle aangesloten kluiswanden.
+* **Wall Detail:** Dynamische grid-weergave van specifieke kluiswanden met remote control functies (Geforceerd openen, Onderhoudsmodus).
+* **Bewonersbeheer (Residents):** Overzicht en beheer van alle bewoners die gekoppeld zijn aan de kluiswanden.
+* **Audit Logs:** Systeemlogboek voor het traceren van hardware-events (alarms), leveringen, ophalingen en beheerder-acties.
+* **Instellingen:** Beheerdersinstellingen en profielbeheer.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Tech Stack
 
-## Code scaffolding
+* **Framework:** Angular 21 (Volledig Standalone Components)
+* **Styling:** SCSS (Custom Apple-design system, centraal via `styles.scss`)
+* **State & Data:** RxJS (~7.8.0)
+* **Testing:** Vitest & JSDOM (Snelle, moderne unit testing)
+* **Formatting:** Prettier
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Projectstructuur
 
-```bash
-ng generate component component-name
-```
+De frontend maakt gebruik van een modulaire "pages" en "services" architectuur:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```text
+src/app/
+├── app.config.ts & app.routes.ts # Standalone app bootstrapping & routing
+├── guards/
+│   └── auth.guard.ts             # Beschermt routes tegen onbevoegde toegang
+├── interceptors/
+│   └── auth.interceptor.ts       # Voegt automatisch JWT/Auth tokens toe aan API calls
+├── models/
+│   └── fleet.model.ts            # Gedeelde TypeScript interfaces (Wall, Locker, etc.)
+├── pages/                        # Smart Components / Pagina's
+│   ├── fleet-overview/           # Hoofddashboard (KPI's & Locaties)
+│   ├── login/                    # Login pagina
+│   ├── logs-comp/                # Systeemlogboek / Audit trail
+│   ├── not-found/                # Custom 404 pagina
+│   ├── reset-password/           # Wachtwoord herstel
+│   ├── residents-comp/           # Bewoners overzicht
+│   ├── settings-comp/            # Admin instellingen
+│   ├── sidebar/                  # Hoofdnavigatie
+│   └── wall-detail-comp/         # Specifieke kluiswand bediening
+└── services/
+    ├── auth.ts                   # Login state & sessie beheer
+    └── fleet.ts                  # API communicatie met FastAPI backend
