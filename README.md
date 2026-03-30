@@ -6,17 +6,17 @@ Dit project is naadloos gekoppeld aan de [Smart Parcel Wall Backend](https://git
 
 ## Kernfuncties & Pagina's
 
-* **Authenticatie:** Beveiligde login (`login`), wachtwoord reset (`reset-password`), en route-beveiliging via Angular Guards en HTTP Interceptors.
+* **Authenticatie:** Beveiligde login, wachtwoord reset, en route-beveiliging via Angular Guards en HTTP Interceptors.
 * **Fleet Overview:** Real-time overzicht van bezettingsgraden, actieve pakketten, en offline/online statussen van alle aangesloten kluiswanden.
 * **Wall Detail:** Dynamische grid-weergave van specifieke kluiswanden met remote control functies (Geforceerd openen, Onderhoudsmodus).
-* **Bewonersbeheer (Residents):** Overzicht en beheer van alle bewoners die gekoppeld zijn aan de kluiswanden.
+* **Bewonersbeheer:** Overzicht en beheer van alle bewoners die gekoppeld zijn aan de kluiswanden.
 * **Audit Logs:** Systeemlogboek voor het traceren van hardware-events (alarms), leveringen, ophalingen en beheerder-acties.
 * **Instellingen:** Beheerdersinstellingen en profielbeheer.
 
 ## Tech Stack
 
 * **Framework:** Angular 21 (Volledig Standalone Components)
-* **Styling:** SCSS (Custom Apple-design system, centraal via `styles.scss`)
+* **Styling:** SCSS 
 * **State & Data:** RxJS (~7.8.0)
 * **Testing:** Vitest & JSDOM (Snelle, moderne unit testing)
 * **Formatting:** Prettier
