@@ -212,10 +212,11 @@ export class WallDetailComp implements OnInit {
     return `size-${size.toLowerCase()}`;
   }
 
-  getStatusClass(status: string): string {
+getStatusClass(status: string): string {
     switch (status.toUpperCase()) {
       case 'AVAILABLE': return 'status-free';
       case 'OCCUPIED': return 'status-occupied';
+      case 'RETURN': return 'status-return'; // <--- NIEUW: Voor retouren
       case 'ERROR': return 'status-error';
       case 'MAINTENANCE': return 'status-maintenance';
       default: return 'status-free';

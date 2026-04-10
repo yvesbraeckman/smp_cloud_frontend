@@ -23,6 +23,8 @@
     </div>
 
     <div class="table-container">
+    <div class="table-responsive">
+
     <table>
         <thead>
             <tr>
@@ -39,11 +41,20 @@
                 <tr>
                     <td colspan="7" style="text-align: center; padding: 40px; color: #86868b;">Data laden...</td>
                 </tr>
-            } @else if (residents.length === 0) {
+            }
+            @else if (residents.length === 0) {
                 <tr>
-                    <td colspan="7" style="text-align: center; padding: 40px; color: #86868b;">Geen bewoners gevonden.</td>
+                    <td colspan="7">
+                        <div class="empty-state">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#d2d2d7"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/></svg>
+                            <h4>Geen bewoners gevonden</h4>
+                            <p>Er zijn momenteel nog geen bewoners gekoppeld aan deze locatie. Voeg er een toe om te starten.</p>
+                            <button class="btn-primary btn-small" (click)="addResident()">+ Nieuwe Bewoner</button>
+                        </div>
+                    </td>
                 </tr>
-            } @else {
+            }
+            @else {
                 @for (resident of residents; track resident.id) {
                     <tr>
                         <td style="color: #86868b;">{{ resident.id }}</td>
@@ -76,8 +87,8 @@
             }
         </tbody>
     </table>
-
-        @if (totalRecords > 0) {
+    </div>
+        </div> @if (totalRecords > 0) {
             <div class="pagination">
                 <span>Tonen {{ (currentPage - 1) * pageSize + 1 }}-{{ Math.min(currentPage * pageSize, totalRecords) }} van {{ totalRecords }} bewoners</span>
                 <div class="page-links">
@@ -95,8 +106,6 @@
                 </div>
             </div>
         }
-    </div>
-
 </main>
 @if (showAddModal) {
     <div class="modal-overlay" (mousedown)="onBackdropClick($event)">
@@ -183,6 +192,40 @@
                     {{ isDeleting ? 'Verwijderen...' : 'Ja, verwijder' }}
                 </button>
             </div>
+        </div>
+    </div>
+}
+@if (showKeyModal && residentForKey) {
+    <div class="modal-overlay" (mousedown)="onBackdropClickKey($event)">
+        <div class="modal-box-alert" (click)="$event.stopPropagation()">
+            
+            <div class="modal-icon icon-blue">
+                <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="currentColor"><path d="M223.5-423.5Q200-447 200-480t23.5-56.5Q247-560 280-560t56.5 23.5Q360-513 360-480t-23.5 56.5Q313-400 280-400t-56.5-23.5ZM280-240q-100 0-170-70T40-480q0-100 70-170t170-70q67 0 121.5 33t86.5 87h352l120 120-180 180-80-60-80 60-85-60h-47q-32 54-86.5 87T280-240Zm0-80q56 0 98.5-34t56.5-86h125l58 41 82-61 71 55 75-75-40-40H435q-14-52-56.5-86T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47Z"/></svg>
+            </div>
+
+            <h3>Toegangscode</h3>
+            <p class="mb-24">Code voor bewoner <strong>{{ residentForKey.name }}</strong>.</p>
+
+            @if (keyErrorMessage) {
+                <div class="error-banner mb-24" style="text-align: left;">
+                    {{ keyErrorMessage }}
+                </div>
+            } @else if (isGeneratingKey) {
+                <div class="loading-state">
+                    <span class="dot-typing"></span> Pincode ophalen...
+                </div>
+            } @else if (generatedPin) {
+                <div class="pin-display-box">
+                    <span class="pin-label">Afhaal Pincode</span>
+                    <div class="pin-value">{{ generatedPin }}</div>
+                </div>
+                <p class="pin-instructions">Geef deze code veilig door aan de bewoner. Hij/zij kan hiermee direct inloggen op de kluiswand.</p>
+            }
+
+            <div class="modal-actions">
+                <button class="btn-primary btn-full-width" (click)="closeKeyModal()">Sluiten</button>
+            </div>
+            
         </div>
     </div>
 }

@@ -648,3 +648,18 @@ h1 {
     margin-top: 12px;
     font-weight: 500;
 }
+
+/* --- NIEUW: Styling voor Retouren --- */
+.status-return {
+    background-color: #af52de; /* Apple Purple */
+    color: #ffffff;
+}
+
+.legend-color.return {
+    background-color: #af52de;
+}
+
+.tag-return {
+    background-color: #f2e6fc; /* Zeer licht paars voor de achtergrond */
+    color: #af52de;
+}

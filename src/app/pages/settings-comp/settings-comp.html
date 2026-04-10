@@ -45,15 +45,15 @@
                     <div class="settings-box">
                         <div class="settings-row">
                             <label>Huidig wachtwoord</label>
-                            <input type="password" [(ngModel)]="passwords.current" placeholder="••••••••">
+                            <input type="password" [(ngModel)]="passwords.current" placeholder="••••••••" autocomplete="new-password">
                         </div>
                         <div class="settings-row">
                             <label>Nieuw wachtwoord</label>
-                            <input type="password" [(ngModel)]="passwords.new" placeholder="••••••••">
+                            <input type="password" [(ngModel)]="passwords.new" placeholder="••••••••" autocomplete="new-password">
                         </div>
                         <div class="settings-row">
                             <label>Bevestig nieuw</label>
-                            <input type="password" [(ngModel)]="passwords.confirm" placeholder="••••••••">
+                            <input type="password" [(ngModel)]="passwords.confirm" placeholder="••••••••" autocomplete="new-password">
                         </div>
                         <div class="settings-footer">
                             @if (passwordMessage) { <span class="success-text">{{ passwordMessage }}</span> }

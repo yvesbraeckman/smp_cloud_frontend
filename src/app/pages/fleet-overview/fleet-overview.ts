@@ -15,6 +15,8 @@ import { Sidebar } from '../sidebar/sidebar';
   styleUrl: './fleet-overview.scss',
 })
 export class FleetOverview implements OnInit {
+  adminName: string = 'Systeem/Onbekende Admin'; // Fallback naam
+
   kpis: DashboardKPIs | null = null;
   walls: Wall[] = [];
 
@@ -47,6 +49,19 @@ export class FleetOverview implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.fetchAdmin(); // Haal admin gegevens op voor de logs
+  }
+
+  fetchAdmin(): void {
+    this.fleetService.getCurrentAdmin().subscribe({
+      next: (admin) => {
+        // Pas '.name' aan naar '.email' of de juiste property van jouw admin object
+        if (admin && admin.name) {
+          this.adminName = admin.name;
+        }
+      },
+      error: (err) => console.error('Kon admin niet ophalen:', err)
+    });
   }
 
   loadData(): void {
@@ -85,13 +100,13 @@ export class FleetOverview implements OnInit {
 
   goToStep2() {
     if (!this.newWall.name || !this.newWall.address || this.newWall.lockerCount < 1) return;
-    
+
     // Genereer de grid op basis van het aantal kluisjes
     this.newLockers = Array.from({ length: this.newWall.lockerCount }, (_, i) => ({
       door_number: i + 1,
       size: 'M' // Standaard Medium
     }));
-    
+
     this.wizardStep = 2;
   }
 
@@ -110,17 +125,25 @@ export class FleetOverview implements OnInit {
     };
 
     this.fleetService.createWall(payload).subscribe({
-      next: () => {
+      next: (response) => {
         this.isSaving = false;
+
+        // --- NIEUW: Maak Audit Log aan ---
+        this.fleetService.createAuditLog({
+          event_type: 'WALL_CREATED',
+          severity: 'INFO',
+          description: `Muur '${this.newWall.name}' is aangemaakt door admin: ${this.adminName}`
+        }).subscribe(); // Je hoeft hier niet per se op de response te wachten
+        // ---------------------------------
+
         this.closeModal();
-        this.cdr.detectChanges()
         this.loadWalls(); // Herlaad de grid
-        this.cdr.detectChanges()
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Fout bij opslaan:', err);
         this.isSaving = false;
-        this.cdr.detectChanges()
+        this.cdr.detectChanges();
         alert('Er ging iets mis bij het opslaan.');
       }
     });
@@ -138,12 +161,24 @@ export class FleetOverview implements OnInit {
 
   confirmDeleteWall() {
     if (!this.wallToDelete) return;
-    
+
     this.isDeleting = true;
+    const wallName = this.wallToDelete.name; // Bewaar de naam voor de log
+
     this.fleetService.deleteWall(this.wallToDelete.id).subscribe({
       next: () => {
         this.isDeleting = false;
         this.wallToDelete = null;
+
+        // --- UPDATE: Maak Audit Log aan ZONDER location_id ---
+        this.fleetService.createAuditLog({
+          // location_id is hier weggehaald!
+          event_type: 'WALL_DELETED',
+          severity: 'WARNING',
+          description: `Muur '${wallName}' is verwijderd door admin: ${this.adminName}`
+        }).subscribe();
+        // ---------------------------------
+
         this.loadData(); // Herlaad direct de KPI's en de muren-grid
         this.cdr.detectChanges();
       },
@@ -151,7 +186,7 @@ export class FleetOverview implements OnInit {
         console.error('Fout bij verwijderen muur:', err);
         this.isDeleting = false;
         this.cdr.detectChanges();
-        alert('Kan muur niet verwijderen. Controleer of deze nog actieve pakketten of bewoners heeft (afhankelijk van je backend restricties).');
+        alert('Kan muur niet verwijderen. Controleer of deze nog actieve pakketten of bewoners heeft.');
       }
     });
   }

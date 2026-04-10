@@ -40,6 +40,12 @@ export class ResidentsComp {
   isDeleting = false;
   isEditMode = false;
   editingResidentId: number | null = null;
+  // --- Variabelen voor de Sleutel Pop-up ---
+  showKeyModal = false;
+  isGeneratingKey = false;
+  generatedPin = '';
+  residentForKey: Resident | null = null;
+  keyErrorMessage = ''; // NIEUW: Specifieke error voor deze modal
 
   currentAdminName = 'Een beheerder'; // Fallback naam
 
@@ -188,13 +194,55 @@ export class ResidentsComp {
   }
 
   generateCode(resident: Resident): void {
+    this.residentForKey = resident;
+    this.showKeyModal = true;
+    this.isGeneratingKey = true;
+    this.generatedPin = '';
+    this.keyErrorMessage = ''; // Reset eventuele eerdere foutmeldingen
+
     this.fleetService.generateCredentials(resident.id).subscribe({
       next: (res) => {
-        // Since we don't have real email yet, show the debug pin in the alert
-        alert(`Succes: ${res.message}\n(Debug PIN: ${res.debug_pin})`);
+        this.generatedPin = res.debug_pin;
+        this.isGeneratingKey = false;
+
+        this.fleetService.createAuditLog({
+          location_id: resident.location_id || 1,
+          locker_id: undefined,
+          event_type: 'CREDENTIALS_GENERATED',
+          severity: 'INFO',
+          description: `${this.currentAdminName} heeft handmatig een toegangscode opgevraagd voor bewoner '${resident.name}'.`
+        }).subscribe();
+
+        this.cdr.detectChanges();
       },
-      error: (err) => alert('Fout bij genereren code')
+      error: (err) => {
+        this.isGeneratingKey = false;
+        
+        // Check of het de specifieke 400 error is voor "geen pakjes"
+        if (err.status === 400) {
+            this.keyErrorMessage = 'Deze bewoner heeft momenteel geen pakjes in de kluiswand. Er is geen afhaalcode nodig.';
+        } else {
+            // Fallback voor andere server errors (bijv. 500)
+            this.keyErrorMessage = err.error?.detail || 'Er is een onbekende fout opgetreden bij het genereren van de code.';
+        }
+        
+        // We sluiten de modal bewust NIET, zodat de gebruiker de foutmelding kan lezen
+        this.cdr.detectChanges();
+      }
     });
+  }
+
+  closeKeyModal(): void {
+    this.showKeyModal = false;
+    this.residentForKey = null;
+    this.generatedPin = '';
+    this.keyErrorMessage = ''; // Reset de error bij sluiten
+  }
+
+  onBackdropClickKey(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.closeKeyModal();
+    }
   }
 
   addResident(): void {

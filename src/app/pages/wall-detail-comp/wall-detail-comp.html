@@ -21,7 +21,11 @@
             </div>
             <div class="legend-item">
                 <span class="legend-color occupied"></span>
-                <span class="legend-label">Bezet</span>
+                <span class="legend-label">Bezet (Levering)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color return"></span>
+                <span class="legend-label">Klaar voor Retour</span>
             </div>
             <div class="legend-item">
                 <span class="legend-color maintenance"></span>
@@ -65,10 +69,11 @@
                     <div class="detail-label">Status</div>
                     <span class="status-tag" [ngClass]="{
                         'tag-occupied': selectedLocker.status === 'Occupied',
+                        'tag-return': selectedLocker.status === 'Return',
                         'tag-maintenance': selectedLocker.status === 'Maintenance',
                         'tag-free': selectedLocker.status === 'Available'
                     }">
-                        {{ selectedLocker.status | titlecase }}
+                        {{ selectedLocker.status === 'Return' ? 'Wacht op koerier' : (selectedLocker.status | titlecase) }}
                     </span>
                 </div>
 

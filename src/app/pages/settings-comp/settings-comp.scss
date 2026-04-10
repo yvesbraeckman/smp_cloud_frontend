@@ -318,3 +318,24 @@
     transform: none;
     box-shadow: none;
 }
+
+/* Fix for Chrome Autofill Blue Background - Refined */
+.settings-row input:-webkit-autofill,
+.settings-row input:-webkit-autofill:hover,
+.settings-row input:-webkit-autofill:focus,
+.settings-row input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+    background-color: transparent !important;
+    transition: background-color 5000s ease-in-out 0s;
+    /* Remove -webkit-text-fill-color so placeholder stays grey */
+}
+
+/* Ensure placeholder text stays grey */
+.settings-row input::placeholder {
+    color: #c7c7cc !important;
+}
+
+/* Only darken text when there's actual content (not placeholder) */
+.settings-row input:not(:placeholder-shown) {
+    color: #1d1d1f;
+}

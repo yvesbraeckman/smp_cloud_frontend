@@ -19,7 +19,7 @@ export interface Locker {
   id: number;
   location_id: number;
   size: 'S' | 'M' | 'L';
-  status: 'Available' | 'Occupied' | 'Maintenance' | 'Error';
+  status: 'Available' | 'Occupied' | 'Maintenance' | 'Error' | 'Return';
   shadow_state: any; // Add specific typing if you know the exact structure
 }
 
@@ -33,7 +33,7 @@ export interface WallDetail {
 
 export interface LockerDetail {
   id: number;
-  status: 'Available' | 'Occupied' | 'Maintenance' | 'Error';
+  status: 'Available' | 'Occupied' | 'Maintenance' | 'Error' | 'Return';
   size: 'S' | 'M' | 'L';
   shadow_state: any;
   parcel_id: number | null;
