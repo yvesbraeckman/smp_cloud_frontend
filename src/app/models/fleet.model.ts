@@ -9,8 +9,8 @@ export interface DashboardKPIs {
 export interface Wall {
   id: number;
   name: string;
-  status: string; // 'ONLINE' of 'OFFLINE'
-  occupancy: string; // bijv. "9/20" of "Onbekend"
+  status: string; 
+  occupancy: string; 
   active_alarms: number;
   last_sync: string | null;
 }
@@ -20,7 +20,7 @@ export interface Locker {
   location_id: number;
   size: 'S' | 'M' | 'L';
   status: 'Available' | 'Occupied' | 'Maintenance' | 'Error' | 'Return';
-  shadow_state: any; // Add specific typing if you know the exact structure
+  shadow_state: any; 
 }
 
 export interface WallDetail {
