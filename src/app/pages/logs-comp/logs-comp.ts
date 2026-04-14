@@ -5,91 +5,118 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Sidebar } from '../sidebar/sidebar';
 
+/**
+ * Audit log viewer component that displays a filterable, sortable table
+ * of system events (deliveries, alarms, admin actions, hardware events).
+ *
+ * Supports filtering by date, location/wall, event type, and free-text
+ * search. Logs can be exported as a CSV file.
+ */
 @Component({
   selector: 'app-logs-comp',
   imports: [FormsModule, CommonModule, Sidebar],
   templateUrl: './logs-comp.html',
   styleUrl: './logs-comp.scss',
 })
-export class LogsComp implements OnInit{
-  walls: Wall[] = []; // Nieuwe array voor de dropdown
+export class LogsComp implements OnInit {
+  /** List of walls for the location filter dropdown. */
+  walls: Wall[] = [];
+
+  /** Current audit log entries returned by the backend. */
   logs: AuditLog[] = [];
-  
-  // Filter statussen
+
+  /** Active filter values applied to the log query. */
   filters = {
-    date: new Date().toISOString().split('T')[0], // Vandaag als standaard
+    date: new Date().toISOString().split('T')[0], // Defaults to today
     locationId: '',
     type: '',
-    search: ''
+    search: '',
   };
 
-  constructor(private fleetService: Fleet, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private fleetService: Fleet,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
-    this.loadWalls()
+    this.loadWalls();
     this.loadLogs();
   }
 
+  /** Fetch all walls to populate the location filter dropdown. */
   loadWalls(): void {
     this.fleetService.getWalls().subscribe({
       next: (data) => {
         this.walls = data;
         this.cdr.detectChanges();
-      }
-    });
-  }
-
-  // Haal de logs op via de Fleet service
-  loadLogs(): void {
-    this.fleetService.getAuditLogs(
-      this.filters.date,
-      this.filters.locationId,
-      this.filters.type,
-      this.filters.search
-    ).subscribe({
-      next: (data) => {
-        this.logs = data
-        this.cdr.detectChanges(); // 2. Forceer Angular om de tabel DIRECT te tekenen!
       },
-      error: (err) => console.error('Fout bij ophalen logs:', err)
     });
   }
 
+  /** Fetch audit logs from the backend using the current filter values. */
+  loadLogs(): void {
+    this.fleetService
+      .getAuditLogs(
+        this.filters.date,
+        this.filters.locationId,
+        this.filters.type,
+        this.filters.search,
+      )
+      .subscribe({
+        next: (data) => {
+          this.logs = data;
+          this.cdr.detectChanges(); // Force immediate UI update
+        },
+        error: (err) => console.error('Fout bij ophalen logs:', err),
+      });
+  }
+
+  /** Reset all filters to their defaults (today, no location/type/search). */
   resetFilters(): void {
     this.filters = {
-      date: new Date().toISOString().split('T')[0], // Zet terug naar vandaag
+      date: new Date().toISOString().split('T')[0], // Reset to today
       locationId: '',
       type: '',
-      search: ''
+      search: '',
     };
-    // Laad direct de schone lijst in
     this.loadLogs();
   }
 
-  // Exporteer CSV via de Fleet service
+  /**
+   * Export the current filtered logs as a CSV download.
+   *
+   * Creates a temporary `<a>` element to trigger the browser's
+   * download behaviour with the blob returned by the backend.
+   */
   exportCsv(): void {
-    this.fleetService.exportAuditLogs(
-      this.filters.date,
-      this.filters.locationId,
-      this.filters.type,
-      this.filters.search
-    ).subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `smartwall_logs_${this.filters.date || 'export'}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        this.cdr.detectChanges(); // 2. Forceer Angular om de tabel DIRECT te tekenen!
-      },
-      error: (err) => console.error('Fout bij exporteren CSV:', err)
-    });
+    this.fleetService
+      .exportAuditLogs(
+        this.filters.date,
+        this.filters.locationId,
+        this.filters.type,
+        this.filters.search,
+      )
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `smartwall_logs_${this.filters.date || 'export'}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          this.cdr.detectChanges(); // Force immediate UI update
+        },
+        error: (err) => console.error('Fout bij exporteren CSV:', err),
+      });
   }
 
-  // CSS classes toewijzen op basis van severity
+  /**
+   * Return a CSS class name based on the log severity level.
+   *
+   * Used by `ngClass` to apply colour-coded status tags.
+   */
   getLogTypeClass(severity: string): string {
     const sev = severity?.toLowerCase();
     if (sev === 'critical' || sev === 'error') return 'type-error';

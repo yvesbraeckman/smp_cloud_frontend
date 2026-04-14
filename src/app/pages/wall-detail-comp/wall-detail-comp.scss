@@ -1,665 +1,662 @@
-/* --- BASIS & LAYOUT --- */
+/* ══ Base & Layout ══ */
 * {
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 :host {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background-color: #f5f5f7;
-    /* Apple's standaard lichte achtergrond */
-    position: absolute;
-    top: 0;
-    left: 0;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #f5f5f7;
+  /* Apple-style light background */
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-/* --- DE MAIN CONTENT --- */
+/* ══ Main Content ══ */
 .main-content {
-    flex-grow: 1;
-    padding: 40px 48px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
+  flex-grow: 1;
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
 }
 
 header {
-    margin-bottom: 24px;
-    flex-shrink: 0;
+  margin-bottom: 24px;
+  flex-shrink: 0;
 }
 
 .header-title-group {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 h1 {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    margin: 0;
-    color: #1d1d1f;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin: 0;
+  color: #1d1d1f;
 }
 
-/* Status Badge in Header */
+/* Status badge in the header */
 .status-badge-header {
-    font-size: 13px;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .status-badge-header.online {
-    background-color: #e5f9eb;
-    color: #34c759;
+  background-color: #e5f9eb;
+  color: #34c759;
 }
 
 .status-badge-header.offline {
-    background-color: #ffeceb;
-    color: #ff3b30;
+  background-color: #ffeceb;
+  color: #ff3b30;
 }
 
 .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 .online .dot {
-    background-color: #34c759;
+  background-color: #34c759;
 }
 
 .offline .dot {
-    background-color: #ff3b30;
+  background-color: #ff3b30;
 }
 
-/* --- DE MUUR CONTAINER --- */
+/* ══ Wall Container ══ */
 .wall-wrapper {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: auto;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
 }
 
-/* De fysieke kluiswand */
+/* The physical locker wall grid */
 .locker-grid {
-    display: grid;
-    grid-auto-flow: column dense;
-    grid-template-rows: repeat(6, 80px);
-    grid-auto-columns: 110px;
-    gap: 8px;
-    /* Iets krappere gap voor strakker aanzicht */
-    background-color: #1c1c1e;
-    /* Donkere Apple hardware kleur */
-    padding: 16px;
-    border-radius: 16px;
-    /* Zachte buitenranden */
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    margin: auto;
+  display: grid;
+  grid-auto-flow: column dense;
+  grid-template-rows: repeat(6, 80px);
+  grid-auto-columns: 110px;
+  gap: 8px;
+  background-color: #1c1c1e;
+  /* Dark Apple hardware colour */
+  padding: 16px;
+  border-radius: 16px;
+  /* Soft outer edges */
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  margin: auto;
 }
 
-/* --- LOCKER STIJLEN --- */
+/* ══ Locker Cells ══ */
 .locker-cell {
-    border-radius: 6px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 10px;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
-    position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .locker-cell:hover {
-    transform: scale(0.97);
-    z-index: 5;
-    filter: brightness(1.1);
+  transform: scale(0.97);
+  z-index: 5;
+  filter: brightness(1.1);
 }
 
-/* Subtiele, Apple-achtige selectie (dikke blauwe rand in plaats van zwart) */
+/* Apple-style selection highlight (blue border) */
 .locker-cell.selected {
-    border: 3px solid #0a84ff;
-    box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.2);
-    transform: scale(1.02);
-    z-index: 10;
-    /* Hoger in de muur, maar de modal wint altijd */
+  border: 3px solid #0a84ff;
+  box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.2);
+  transform: scale(1.02);
+  z-index: 10;
 }
 
-/* HOOGTE VARIATIES */
+/* Size variants (grid row span) */
 .size-s {
-    grid-row: span 1;
+  grid-row: span 1;
 }
 
 .size-m {
-    grid-row: span 2;
+  grid-row: span 2;
 }
 
 .size-l {
-    grid-row: span 3;
+  grid-row: span 3;
 }
 
-/* STATUS KLEUREN (Apple System Colors) */
+/* Status colours */
 .status-free {
-    background-color: #f5f5f7;
-    /* Lichte kluisdeur */
-    color: #86868b;
+  background-color: #f5f5f7;
+  /* Light locker door */
+  color: #86868b;
 }
 
 .status-occupied {
-    background-color: #0a84ff;
-    /* Apple Blue */
-    color: #ffffff;
+  background-color: #0a84ff;
+  /* Apple Blue */
+  color: #ffffff;
 }
 
 .status-error {
-    background-color: #ff3b30;
-    /* Apple Red */
-    color: #ffffff;
+  background-color: #ff3b30;
+  /* Apple Red */
+  color: #ffffff;
 }
 
-/* Onderhoud: Strak afzetlint op een donkere achtergrond */
+/* Maintenance: caution-tape style on a dark background */
 .status-maintenance {
-    background-color: #2c2c2e;
-    border: 1px solid #ff9500;
-    color: #ff9500;
-    background-image: repeating-linear-gradient(45deg,
-            rgba(255, 149, 0, 0.15),
-            rgba(255, 149, 0, 0.15) 10px,
-            rgba(0, 0, 0, 0) 10px,
-            rgba(0, 0, 0, 0) 20px);
+  background-color: #2c2c2e;
+  border: 1px solid #ff9500;
+  color: #ff9500;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 149, 0, 0.15),
+    rgba(255, 149, 0, 0.15) 10px,
+    rgba(0, 0, 0, 0) 10px,
+    rgba(0, 0, 0, 0) 20px
+  );
 }
 
 .locker-id {
-    font-size: 13px;
-    font-weight: 600;
+  font-size: 13px;
+  font-weight: 600;
 }
 
-/* Leesbaarheid fix voor onderhoud */
+/* Readability fix for maintenance cells */
 .status-maintenance .locker-id {
-    background-color: rgba(28, 28, 30, 0.9);
-    padding: 2px 6px;
-    border-radius: 4px;
-    display: inline-block;
+  background-color: rgba(28, 28, 30, 0.9);
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
 }
 
-/* --- ACTION PANEL (Zwevend Rechterpaneel) --- */
+/* ══ Action Panel (floating right sidebar) ══ */
 .action-panel {
-    width: 380px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    /* macOS Glas-effect */
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    right: 24px;
-    top: 24px;
-    bottom: 24px;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
-    z-index: 50;
-    overflow: hidden;
-    animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  width: 380px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  /* macOS frosted-glass effect */
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  bottom: 24px;
+  border-radius: 20px;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  z-index: 50;
+  overflow: hidden;
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes slideInRight {
-    from {
-        transform: translateX(50px);
-        opacity: 0;
-    }
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
 
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .panel-header {
-    padding: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .panel-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: #1d1d1f;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1d1d1f;
 }
 
 .close-btn {
-    background: transparent;
-    border: none;
-    color: #86868b;
-    cursor: pointer;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
+  background: transparent;
+  border: none;
+  color: #86868b;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
 }
 
 .close-btn:hover {
-    background: #e5e5ea;
-    color: #1d1d1f;
+  background: #e5e5ea;
+  color: #1d1d1f;
 }
 
 .panel-body {
-    padding: 0 24px 24px 24px;
-    flex-grow: 1;
-    overflow-y: auto;
+  padding: 0 24px 24px 24px;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 .detail-group {
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .detail-label {
-    font-size: 12px;
-    color: #86868b;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-    font-weight: 600;
+  font-size: 12px;
+  color: #86868b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  font-weight: 600;
 }
 
 .detail-value {
-    font-size: 17px;
-    font-weight: 500;
-    color: #1d1d1f;
+  font-size: 17px;
+  font-weight: 500;
+  color: #1d1d1f;
 }
 
 .detail-subtext {
-    font-size: 14px;
-    color: #86868b;
-    margin-top: 4px;
-    line-height: 1.4;
+  font-size: 14px;
+  color: #86868b;
+  margin-top: 4px;
+  line-height: 1.4;
 }
 
 .empty-text {
-    color: #86868b;
-    font-style: italic;
-    font-weight: 400;
+  color: #86868b;
+  font-style: italic;
+  font-weight: 400;
 }
 
 .divider {
-    height: 1px;
-    background-color: #e5e5ea;
-    margin: 24px 0;
+  height: 1px;
+  background-color: #e5e5ea;
+  margin: 24px 0;
 }
 
-/* Status tags in het paneel */
+/* Status tags in the detail panel */
 .status-tag {
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .tag-occupied {
-    background-color: #e5f0ff;
-    color: #0a84ff;
+  background-color: #e5f0ff;
+  color: #0a84ff;
 }
 
-/* Lichtblauw */
+/* Light blue */
 .tag-maintenance {
-    background-color: #fff4e5;
-    color: #ff9500;
+  background-color: #fff4e5;
+  color: #ff9500;
 }
 
-/* Lichtoranje */
+/* Light orange */
 .tag-free {
-    background-color: #e5f9eb;
-    color: #34c759;
+  background-color: #e5f9eb;
+  color: #34c759;
 }
 
-/* Lichtgroen */
+/* Light green */
 
-/* --- ACTIE KNOPPEN ONDERAAN --- */
+/* ══ Action Buttons (panel footer) ══ */
 .actions-footer {
-    padding: 24px;
-    background-color: #fafafa;
-    border-top: 1px solid #e5e5ea;
+  padding: 24px;
+  background-color: #fafafa;
+  border-top: 1px solid #e5e5ea;
 }
 
 .btn-action {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .btn-action:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
-/* Geforceerd Openen (Rood) */
+/* Force Open (Red) */
 .btn-force {
-    background-color: rgba(255, 59, 48, 0.1);
-    color: #ff3b30;
+  background-color: rgba(255, 59, 48, 0.1);
+  color: #ff3b30;
 }
 
 .btn-force:hover {
-    background-color: #ff3b30;
-    color: white;
-    transform: translateY(-1px);
+  background-color: #ff3b30;
+  color: white;
+  transform: translateY(-1px);
 }
 
-/* Onderhoud (Oranje) */
+/* Maintenance (Orange) */
 .btn-maint {
-    background-color: rgba(255, 149, 0, 0.1);
-    color: #ff9500;
+  background-color: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
 }
 
 .btn-maint:hover {
-    background-color: #ff9500;
-    color: white;
-    transform: translateY(-1px);
+  background-color: #ff9500;
+  color: white;
+  transform: translateY(-1px);
 }
 
-/* --- PLAK HIERONDER JE .modal-overlay, .modal-box ENZ. --- */
-/* ... (Deze stonden perfect en hoef je niet aan te passen) ... */
-/* --- PLAK EERST JE ALGEMENE MODAL CSS HIER (overlay, box, animatie, etc) --- */
+/* ══ Confirmation Modals ══ */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    /* Pakt de hele breedte van je browser */
-    height: 100vh;
-    /* Pakt de hele hoogte van je browser */
-    background-color: rgba(15, 23, 42, 0.6);
-    /* Mooie donkere slate-tint */
-    backdrop-filter: blur(4px);
-    /* Maakt de pagina erachter chique wazig */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    /* Zorgt dat hij 100% zeker over alles heen ligt */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.6); /* Dark slate tint */
+  backdrop-filter: blur(4px); /* Frosted-glass backdrop */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
 .modal-box {
-    background: #ffffff;
-    padding: 32px;
-    border-radius: 16px;
-    /* Modernere, rondere hoeken */
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 16px;
+  /* Modern, rounded corners */
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .modal-icon {
-    background-color: #fee2e2;
-    color: #ef4444;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px auto;
+  background-color: #fee2e2;
+  color: #ef4444;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px auto;
 }
 
 .modal-box h3 {
-    margin: 0 0 10px 0;
-    color: #1e293b;
-    font-size: 22px;
-    font-weight: 700;
+  margin: 0 0 10px 0;
+  color: #1e293b;
+  font-size: 22px;
+  font-weight: 700;
 }
 
 .modal-box p {
-    color: #64748b;
-    margin: 0 0 28px 0;
-    font-size: 15px;
-    line-height: 1.5;
+  color: #64748b;
+  margin: 0 0 28px 0;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 .modal-actions {
-    display: flex;
-    gap: 12px;
+  display: flex;
+  gap: 12px;
 }
 
 .btn-cancel,
 .btn-danger {
-    flex: 1;
-    /* Zorgt dat beide knoppen exact even breed zijn */
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  flex: 1;
+  /* Both buttons share the same width */
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn-cancel {
-    background-color: #f1f5f9;
-    color: #475569;
+  background-color: #f1f5f9;
+  color: #475569;
 }
 
 .btn-cancel:hover {
-    background-color: #e2e8f0;
-    color: #0f172a;
+  background-color: #e2e8f0;
+  color: #0f172a;
 }
 
 .btn-danger {
-    background-color: #ef4444;
-    color: white;
+  background-color: #ef4444;
+  color: white;
 }
 
 .btn-danger:hover {
-    background-color: #dc2626;
-    transform: translateY(-1px);
-    /* Subtiel lift-effectje bij hover */
-    box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+  background-color: #dc2626;
+  transform: translateY(-1px); /* Subtle lift on hover */
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
 }
 
-/* Een vloeiende, Apple-achtige bounce animatie */
+/* Smooth bounce animation */
 @keyframes modalScaleUp {
-    0% {
-        transform: scale(0.95) translateY(10px);
-        opacity: 0;
-    }
+  0% {
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+  }
 
-    100% {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-    }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
 }
 
-/* Specifieke oranje/waarschuwing kleuren voor de Onderhoud popup */
+/* Maintenance modal — orange/warning colour scheme */
 .maintenance-icon {
-    background-color: #fef3c7 !important;
-    /* Licht oranje achtergrond */
-    color: #f59e0b !important;
-    /* Oranje icoon */
+  background-color: #fef3c7 !important;
+  /* Light orange background */
+  color: #f59e0b !important;
+  /* Orange icon */
 }
 
 .btn-warning {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background-color: #f59e0b;
-    /* Oranje knop */
-    color: white;
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #f59e0b;
+  color: white;
 }
 
 .btn-warning:hover {
-    background-color: #d97706;
-    /* Donkerder oranje bij hover */
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3);
+  background-color: #d97706;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3);
 }
 
-/* Zorgt ervoor dat Angular altijd de knop registreert, en niet per ongeluk het icoontje */
+/* Ensure clicks register on the button, not the embedded SVG icon */
 .btn-action svg {
-    pointer-events: none;
+  pointer-events: none;
 }
 
-/* Forceert dat de knoppenbalk altijd op de voorgrond ligt */
+/* Keep the action footer above the locker grid */
 .actions-footer {
-    position: relative;
-    z-index: 100;
+  position: relative;
+  z-index: 100;
 }
 
-/* --- LEGENDE (Apple Stijl) --- */
+/* ══ Locker Legend ══ */
 .locker-legend {
-    display: inline-flex;
-    align-items: center;
-    gap: 20px;
-    margin-top: 16px;
-    background: rgba(255, 255, 255, 0.6);
-    padding: 10px 20px;
-    border-radius: 30px; /* Mooie, ronde pil-vorm */
-    backdrop-filter: blur(20px); /* Typisch Apple glas-effect */
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 16px;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 10px 20px;
+  border-radius: 30px; /* Pill shape */
+  backdrop-filter: blur(20px); 
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .legend-color {
-    width: 14px;
-    height: 14px;
-    border-radius: 4px; /* Lichte afronding, net als iOS app iconen */
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1); /* Subtiele binnenrand voor contrast */
+  width: 14px;
+  height: 14px;
+  border-radius: 4px; /* Slightly rounded, like iOS app icons */
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1); /* Subtle inner border for contrast */
 }
 
-/* Koppel dit aan je bestaande locker-cell kleuren */
+/* Legend colours matching the locker-cell styles */
 .legend-color.free {
-    background-color: #f5f5f7;
+  background-color: #f5f5f7;
 }
 
 .legend-color.occupied {
-    background-color: #0a84ff;
+  background-color: #0a84ff;
 }
 
 .legend-color.error {
-    background-color: #ff3b30;
+  background-color: #ff3b30;
 }
 
 .legend-color.maintenance {
-    background-color: #2c2c2e;
-    border: 1px solid #ff9500;
-    /* Mini-versie van je arceerpatroon */
-    background-image: repeating-linear-gradient(45deg,
-            rgba(255, 149, 0, 0.3),
-            rgba(255, 149, 0, 0.3) 3px,
-            rgba(0, 0, 0, 0) 3px,
-            rgba(0, 0, 0, 0) 6px);
+  background-color: #2c2c2e;
+  border: 1px solid #ff9500;
+  /* Mini caution-tape pattern */
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 149, 0, 0.3),
+    rgba(255, 149, 0, 0.3) 3px,
+    rgba(0, 0, 0, 0) 3px,
+    rgba(0, 0, 0, 0) 6px
+  );
 }
 
 .legend-label {
-    font-size: 13px;
-    font-weight: 500;
-    color: #86868b;
-    letter-spacing: -0.2px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #86868b;
+  letter-spacing: -0.2px;
 }
 
-
-/* Specifieke kleuren voor de Resultaat popups */
+/* ══ Result Modal colours ══ */
 .success-icon {
-    background-color: #e5f9eb !important; /* Zacht groen */
-    color: #34c759 !important; /* Apple Green */
+  background-color: #e5f9eb !important; 
+  color: #34c759 !important; 
 }
 
 .error-icon {
-    background-color: #ffeceb !important; /* Zacht rood */
-    color: #ff3b30 !important; /* Apple Red */
+  background-color: #ffeceb !important; 
+  color: #ff3b30 !important; 
 }
 
 .btn-primary-modal {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background-color: #0a84ff; /* Apple Blue */
-    color: white;
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #0a84ff; 
+  color: white;
 }
 
 .btn-primary-modal:hover {
-    background-color: #0070df;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(10, 132, 255, 0.3);
+  background-color: #0070df;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(10, 132, 255, 0.3);
 }
 
-/* --- DISABLED STATES (Apple Stijl) --- */
+/* ══ Disabled States ══ */
 .btn-action:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none !important;
-    box-shadow: none !important;
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-/* Zorg dat de knoppen niet oplichten of verkleuren bij hover als ze disabled zijn */
+/* Prevent hover highlight when buttons are disabled */
 .btn-force:disabled:hover {
-    background-color: rgba(255, 59, 48, 0.1);
-    color: #ff3b30;
+  background-color: rgba(255, 59, 48, 0.1);
+  color: #ff3b30;
 }
 
 .btn-maint:disabled:hover {
-    background-color: rgba(255, 149, 0, 0.1);
-    color: #ff9500;
+  background-color: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
 }
 
-/* De subtiele waarschuwingstekst onderaan */
+/* Offline warning text below action buttons */
 .offline-warning-text {
-    font-size: 12px;
-    color: #86868b;
-    text-align: center;
-    margin-top: 12px;
-    font-weight: 500;
+  font-size: 12px;
+  color: #86868b;
+  text-align: center;
+  margin-top: 12px;
+  font-weight: 500;
 }
 
-/* --- NIEUW: Styling voor Retouren --- */
+/* ══ Return / Parcel Pickup Status ══ */
 .status-return {
-    background-color: #af52de; /* Apple Purple */
-    color: #ffffff;
+  background-color: #af52de; 
+  color: #ffffff;
 }
 
 .legend-color.return {
-    background-color: #af52de;
+  background-color: #af52de;
 }
 
 .tag-return {
-    background-color: #f2e6fc; /* Zeer licht paars voor de achtergrond */
-    color: #af52de;
+  background-color: #f2e6fc; 
+  color: #af52de;
 }

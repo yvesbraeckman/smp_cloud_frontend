@@ -1,115 +1,159 @@
+<!-- Audit log viewer — filterable table of system events with CSV export -->
+
 <app-sidebar></app-sidebar>
 <main class="main-content">
-    
-    <header>
-        <h1>Systeem Logboek</h1>
-        <div class="subtitle">Volledige audit trail van alle events, errors en toegangspogingen.</div>
-    </header>
+  <!-- ══ Header ══ -->
+  <header>
+    <h1>Systeem Logboek</h1>
+    <div class="subtitle">Volledige audit trail van alle events, errors en toegangspogingen.</div>
+  </header>
 
-    <div class="filter-bar">
-        <div class="filter-group">
-            <label>Datum</label>
-            <input type="date" [(ngModel)]="filters.date" class="apple-input">
-        </div>
-
-      <div class="filter-group">
-            <label>Locatie</label>
-            <select [(ngModel)]="filters.locationId" class="apple-select">
-                <option value="">Alle Locaties</option>
-                
-                @for (wall of walls; track wall.id) {
-                    <option [value]="wall.id">{{ wall.name }}</option>
-                }
-                
-            </select>
-        </div>
-
-        <div class="filter-group">
-            <label>Event Type</label>
-            <select [(ngModel)]="filters.type" class="apple-select">
-                <option value="">Alles Tonen</option>
-                <option value="INFO">Info</option>
-                <option value="WARNING">Warnings</option>
-                <option value="CRITICAL">Errors / Critical</option>
-            </select>
-        </div>
-
-        <div class="filter-group search-group">
-            <label>Zoeken</label>
-            <div class="search-wrapper">
-                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
-                <input type="text" [(ngModel)]="filters.search" placeholder="Zoek op event of beschrijving..." class="apple-input">
-            </div>
-        </div>
-
-        <div class="filter-actions">
-            <button class="btn-reset" (click)="resetFilters()" title="Filters wissen">
-                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 155.5T440-202v80Zm80 0v-80q87-16 143.5-83.5T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 121-79.5 211.5T520-122Z"/></svg>
-                Reset
-            </button>
-
-            <button class="btn-export" (click)="exportCsv()">
-                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
-                Export CSV
-            </button>
-            <button class="btn-primary" (click)="loadLogs()">Toepassen</button>
-        </div>
+  <!-- ══ Filter bar ══ -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label>Datum</label>
+      <input type="date" [(ngModel)]="filters.date" class="apple-input" />
     </div>
 
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 150px;">Tijdstip</th>
-                    <th style="width: 180px;">Locatie</th>      <th style="width: 100px;">Kluis</th>        <th style="width: 140px;">Niveau</th>
-                    <th>Event & Beschrijving</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (logs.length === 0) {
-                    <tr>
-                        <td colspan="5" class="empty-state"> Geen logs gevonden voor deze filters.
-                        </td>
-                    </tr>
+    <div class="filter-group">
+      <label>Locatie</label>
+      <select [(ngModel)]="filters.locationId" class="apple-select">
+        <option value="">Alle Locaties</option>
+
+        @for (wall of walls; track wall.id) {
+          <option [value]="wall.id">{{ wall.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Event Type</label>
+      <select [(ngModel)]="filters.type" class="apple-select">
+        <option value="">Alles Tonen</option>
+        <option value="INFO">Info</option>
+        <option value="WARNING">Warnings</option>
+        <option value="CRITICAL">Errors / Critical</option>
+      </select>
+    </div>
+
+    <div class="filter-group search-group">
+      <label>Zoeken</label>
+      <div class="search-wrapper">
+        <svg
+          class="search-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          height="18px"
+          viewBox="0 -960 960 960"
+          width="18px"
+          fill="currentColor"
+        >
+          <path
+            d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"
+          />
+        </svg>
+        <input
+          type="text"
+          [(ngModel)]="filters.search"
+          placeholder="Zoek op event of beschrijving..."
+          class="apple-input"
+        />
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button class="btn-reset" (click)="resetFilters()" title="Filters wissen">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="18px"
+          viewBox="0 -960 960 960"
+          width="18px"
+          fill="currentColor"
+        >
+          <path
+            d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 155.5T440-202v80Zm80 0v-80q87-16 143.5-83.5T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 121-79.5 211.5T520-122Z"
+          />
+        </svg>
+        Reset
+      </button>
+
+      <button class="btn-export" (click)="exportCsv()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="18px"
+          viewBox="0 -960 960 960"
+          width="18px"
+          fill="currentColor"
+        >
+          <path
+            d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"
+          />
+        </svg>
+        Export CSV
+      </button>
+      <button class="btn-primary" (click)="loadLogs()">Toepassen</button>
+    </div>
+  </div>
+
+  <!-- ══ Log table ══ -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 150px">Tijdstip</th>
+          <th style="width: 180px">Locatie</th>
+          <th style="width: 100px">Kluis</th>
+          <th style="width: 140px">Niveau</th>
+          <th>Event & Beschrijving</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (logs.length === 0) {
+          <tr>
+            <td colspan="5" class="empty-state">Geen logs gevonden voor deze filters.</td>
+          </tr>
+        } @else {
+          @for (log of logs; track log.timestamp) {
+            <tr [class.row-error]="log.severity.toLowerCase() === 'critical'">
+              <td class="timestamp">{{ log.timestamp | date: 'dd/MM/yy HH:mm:ss' }}</td>
+
+              <td class="location">
+                @if (log.location_name) {
+                  <strong style="color: #1d1d1f; font-weight: 600">{{ log.location_name }}</strong>
                 } @else {
-                    @for (log of logs; track log.timestamp) {
-                        <tr [class.row-error]="log.severity.toLowerCase() === 'critical'">
-                            <td class="timestamp">{{ log.timestamp | date:'dd/MM/yy HH:mm:ss' }}</td>
-                            
-                            <td class="location">
-                                @if (log.location_name) {
-                                    <strong style="color: #1d1d1f; font-weight: 600;">{{ log.location_name }}</strong>
-                                } @else {
-                                    <span style="color: #86868b; font-style: italic;">Systeem</span>
-                                }
-                            </td>
-
-                            <td class="locker">
-                                @if (log.locker_id) {
-                                    <span style="font-weight: 500; color: #1d1d1f;">{{ log.locker_id }}</span>
-                                } @else {
-                                    <span style="color: #86868b;">—</span>
-                                }
-                            </td>
-                            
-                            <td>
-                                <span class="status-tag" [ngClass]="{
-                                    'tag-critical': log.severity.toUpperCase() === 'CRITICAL',
-                                    'tag-warning': log.severity.toUpperCase() === 'WARNING',
-                                    'tag-info': log.severity.toUpperCase() === 'INFO'
-                                }">
-                                    {{ log.severity | titlecase }}
-                                </span>
-                            </td>
-                            
-                            <td class="event-details">
-                                <span class="event-title">{{ log.event_type }}</span><br>
-                                <span class="event-desc">{{ log.description }}</span>
-                            </td>
-                        </tr>
-                    }
+                  <span style="color: #86868b; font-style: italic">Systeem</span>
                 }
-            </tbody>
-        </table>
-    </div>
+              </td>
+
+              <td class="locker">
+                @if (log.locker_id) {
+                  <span style="font-weight: 500; color: #1d1d1f">{{ log.locker_id }}</span>
+                } @else {
+                  <span style="color: #86868b">—</span>
+                }
+              </td>
+
+              <td>
+                <span
+                  class="status-tag"
+                  [ngClass]="{
+                    'tag-critical': log.severity.toUpperCase() === 'CRITICAL',
+                    'tag-warning': log.severity.toUpperCase() === 'WARNING',
+                    'tag-info': log.severity.toUpperCase() === 'INFO',
+                  }"
+                >
+                  {{ log.severity | titlecase }}
+                </span>
+              </td>
+
+              <td class="event-details">
+                <span class="event-title">{{ log.event_type }}</span
+                ><br />
+                <span class="event-desc">{{ log.description }}</span>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
 </main>

@@ -1,20 +1,20 @@
-/* --- BASIS & LAYOUT --- */
+/* ══ Base & Layout ══ */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* --- BASIS & LAYOUT --- */
+/* ══ Host Component ══ */
 :host {
-    display: flex;
-    width: 100vw;
-    /* FIX: Use dvh for mobile browser bar support */
-    height: 100dvh;
-    overflow: hidden;
-    background-color: #f5f5f7;
-    color: #1d1d1f;
+  display: flex;
+  width: 100vw;
+  /* FIX: Use dvh for mobile browser bar support */
+  height: 100dvh;
+  overflow: hidden;
+  background-color: #f5f5f7;
+  color: #1d1d1f;
 }
 
 .main-content {
@@ -29,103 +29,105 @@
 }
 
 header {
-    margin-bottom: 32px;
+  margin-bottom: 32px;
 }
 
 h1 {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
-/* --- TOOLBAR (Zoeken & Toevoegen) --- */
+/* ══ Toolbar (Search & Add) ══ */
 .toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
 .search-wrapper {
-    position: relative;
-    flex-grow: 1;
-    max-width: 400px;
+  position: relative;
+  flex-grow: 1;
+  max-width: 400px;
 }
 
 .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #86868b;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #86868b;
 }
 
-input[type="search"] {
-    width: 100%;
-    padding: 10px 12px 10px 40px;
-    background-color: #e5e5ea;
-    border: 2px solid transparent;
-    border-radius: 10px;
-    font-size: 15px;
-    color: #1d1d1f;
-    transition: all 0.2s;
-    outline: none;
+input[type='search'] {
+  width: 100%;
+  padding: 10px 12px 10px 40px;
+  background-color: #e5e5ea;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #1d1d1f;
+  transition: all 0.2s;
+  outline: none;
 }
 
-input[type="search"]:focus {
-    background-color: #ffffff;
-    border-color: #0a84ff;
-    box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15);
+input[type='search']:focus {
+  background-color: #ffffff;
+  border-color: #0a84ff;
+  box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15);
 }
 
 .btn-primary {
-    background-color: #0a84ff;
-    /* Apple Blue */
-    color: white;
-    border: none;
-    padding: 10px 20px 10px 16px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
-    box-shadow: 0 2px 6px rgba(10, 132, 255, 0.3);
-    margin: 0;
+  background-color: #0a84ff;
+  /* Apple Blue */
+  color: white;
+  border: none;
+  padding: 10px 20px 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  box-shadow: 0 2px 6px rgba(10, 132, 255, 0.3);
+  margin: 0;
 }
 
 .btn-primary:hover:not(:disabled) {
-    background-color: #0070df;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(10, 132, 255, 0.4);
+  background-color: #0070df;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(10, 132, 255, 0.4);
 }
 
 .btn-primary:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-/* --- DATA TABEL --- */
+/* ══ Data Table ══ */
 .table-container {
   background-color: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.03),
+    0 1px 3px rgba(0, 0, 0, 0.02);
   border: 1px solid rgba(0, 0, 0, 0.02);
   display: flex;
   flex-direction: column;
-  
+
   /* CRITICAL: This makes the table area scrollable */
   flex-grow: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  
+
   /* Critical for flex scrolling */
   min-height: 0;
-  
+
   /* Ensure bottom corners stay round when pagination is absent */
   border-radius: 16px 16px 0 0;
 }
@@ -140,7 +142,6 @@ input[type="search"]:focus {
   width: 100%;
   overflow-x: auto;
 }
-
 
 table {
   width: 100%;
@@ -174,57 +175,57 @@ td {
   vertical-align: middle;
 }
 
-/* Verwijder borders van de allerlaatste cellen zodat ze naadloos overlopen in de paginatie */
+/* Remove borders from the very last row so it blends seamlessly into the pagination bar */
 tr:last-child td {
-    border-bottom: none;
-    border-radius: 0;
-    /* Voorkom afronding op de hover-state van de laatste rij */
+  border-bottom: none;
+  border-radius: 0;
+  /* Prevent border-radius on the hover state of the last row */
 }
 
 tr:hover {
-    background-color: #f5f5f7;
+  background-color: #f5f5f7;
 }
 
 .actions-cell {
-    display: flex;
-    gap: 6px;
+  display: flex;
+  gap: 6px;
 }
 
 .btn-icon {
-    width: 34px;
-    height: 34px;
-    border: none;
-    background-color: transparent;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #86868b;
-    transition: all 0.2s ease;
+  width: 34px;
+  height: 34px;
+  border: none;
+  background-color: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #86868b;
+  transition: all 0.2s ease;
 }
 
 .btn-icon:hover {
-    background-color: #e5e5ea;
-    color: #1d1d1f;
+  background-color: #e5e5ea;
+  color: #1d1d1f;
 }
 
 .btn-icon.btn-key:hover {
-    background-color: rgba(255, 149, 0, 0.1);
-    color: #ff9500;
+  background-color: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
 }
 
 .btn-icon.btn-edit:hover {
-    background-color: rgba(10, 132, 255, 0.1);
-    color: #0a84ff;
+  background-color: rgba(10, 132, 255, 0.1);
+  color: #0a84ff;
 }
 
 .btn-icon.btn-delete:hover {
-    background-color: rgba(255, 59, 48, 0.1);
-    color: #ff3b30;
+  background-color: rgba(255, 59, 48, 0.1);
+  color: #ff3b30;
 }
 
-/* --- PAGINERING --- */
+/* ══ Pagination ══ */
 .pagination {
   padding: 16px 24px;
   border-top: 1px solid #f0f0f0;
@@ -237,425 +238,426 @@ tr:hover {
   color: #86868b;
   font-weight: 500;
   background-color: #fafafa;
-  
+
   /* Round bottom corners only */
   border-radius: 0 0 16px 16px;
-  
+
   /* Never shrink */
   flex-shrink: 0;
   margin-top: 0;
 }
 
 .page-links {
-    display: flex;
-    gap: 4px;
-    flex-shrink: 0;
-    /* DIT IS DE MAGIC FIX VOOR CHROME: Verbiedt Chrome om deze box plat te drukken! */
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  /* MAGIC FIX FOR CHROME: prevents Chrome from collapsing this flex box */
 }
 
 .page-links button {
-    /* ... (je bestaande button styling blijft precies hetzelfde) ... */
-    min-width: 32px;
-    height: 32px;
-    padding: 0 8px;
-    border: none;
-    background: transparent;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    color: #1d1d1f;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
+  /* Existing button styling remains unchanged */
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1d1d1f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .page-links button:hover:not(:disabled) {
-    background-color: #e5e5ea;
+  background-color: #e5e5ea;
 }
 
 .page-links button:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 .page-links button.active {
-    background-color: #0a84ff;
-    color: white;
-    box-shadow: 0 2px 6px rgba(10, 132, 255, 0.25);
+  background-color: #0a84ff;
+  color: white;
+  box-shadow: 0 2px 6px rgba(10, 132, 255, 0.25);
 }
 
-/* =========================================
-   MODALS (Gedeelde stijlen)
-   ========================================= */
+/* ══
+   Modals (Shared Styles)
+   ══ */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(4px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
-/* Standaard Modal Box (voor formulieren: links uitgelijnd) */
+/* Standard modal box (for forms: left-aligned) */
 .modal-box {
-    background: #ffffff;
-    border-radius: 16px;
-    width: 100%;
-    max-width: 480px;
-    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.15);
-    animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.15);
+  animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
 
 @keyframes modalScaleUp {
-    0% {
-        transform: scale(0.95) translateY(10px);
-        opacity: 0;
-    }
+  0% {
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+  }
 
-    100% {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-    }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
 }
 
-/* --- FORMULIER MODAL (Nieuwe/Bewerk Bewoner) --- */
+/* ══ Form Modal (Add/Edit Resident) ══ */
 .modal-header {
-    padding: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #f0f0f0;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .modal-header h3 {
-    margin: 0;
-    font-size: 20px;
-    color: #1d1d1f;
-    font-weight: 700;
+  margin: 0;
+  font-size: 20px;
+  color: #1d1d1f;
+  font-weight: 700;
 }
 
 .close-btn {
-    background: transparent;
-    border: none;
-    color: #86868b;
-    cursor: pointer;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
+  background: transparent;
+  border: none;
+  color: #86868b;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
 }
 
 .close-btn:hover {
-    background: #e5e5ea;
-    color: #1d1d1f;
+  background: #e5e5ea;
+  color: #1d1d1f;
 }
 
 .modal-body {
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .error-banner {
-    background-color: #ffeceb;
-    color: #ff3b30;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
+  background-color: #ffeceb;
+  color: #ff3b30;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .form-row {
-    display: flex;
-    gap: 16px;
+  display: flex;
+  gap: 16px;
 }
 
 .form-row .form-group {
-    flex: 1;
+  flex: 1;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .form-group label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #86868b;
+  font-size: 13px;
+  font-weight: 600;
+  color: #86868b;
 }
 
 .form-group input,
 .form-group select {
-    width: 100%;
-    padding: 12px;
-    background-color: #f5f5f7;
-    border: 2px solid transparent;
-    border-radius: 10px;
-    font-size: 15px;
-    color: #1d1d1f;
-    transition: all 0.2s;
-    outline: none;
-    font-family: inherit;
+  width: 100%;
+  padding: 12px;
+  background-color: #f5f5f7;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #1d1d1f;
+  transition: all 0.2s;
+  outline: none;
+  font-family: inherit;
 }
 
 .form-group select {
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2386868b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 16px;
-    padding-right: 40px;
-    cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2386868b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
 }
 
 .form-group input:focus,
 .form-group select:focus {
-    background-color: #ffffff;
-    border-color: #0a84ff;
-    box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15);
+  background-color: #ffffff;
+  border-color: #0a84ff;
+  box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15);
 }
 
 .modal-footer {
-    padding: 20px 24px;
-    background-color: #fafafa;
-    border-top: 1px solid #f0f0f0;
-    border-radius: 0 0 16px 16px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
+  padding: 20px 24px;
+  background-color: #fafafa;
+  border-top: 1px solid #f0f0f0;
+  border-radius: 0 0 16px 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
-/* =========================================
-   WAARSCHUWINGS-MODAL (1-op-1 Sidebar Stijl)
-   ========================================= */
+/* ══
+   Warning / Alert Modal (Delete Confirmation)
+   ══ */
 .modal-box-alert {
-    background: #ffffff;
-    padding: 32px;
-    border-radius: 16px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .modal-icon {
-    background-color: #fee2e2;
-    color: #ef4444;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px auto;
+  background-color: #fee2e2;
+  color: #ef4444;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px auto;
 }
 
 .modal-box-alert h3 {
-    margin: 0 0 10px 0;
-    color: #1e293b;
-    font-size: 22px;
-    font-weight: 700;
+  margin: 0 0 10px 0;
+  color: #1e293b;
+  font-size: 22px;
+  font-weight: 700;
 }
 
 .modal-box-alert p {
-    color: #64748b;
-    margin: 0 0 28px 0;
-    font-size: 15px;
-    line-height: 1.5;
+  color: #64748b;
+  margin: 0 0 28px 0;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 .modal-actions {
-    display: flex;
-    gap: 12px;
+  display: flex;
+  gap: 12px;
 }
 
 .btn-cancel,
 .btn-danger {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn-cancel {
-    background-color: #f1f5f9;
-    color: #475569;
+  background-color: #f1f5f9;
+  color: #475569;
 }
 
 .btn-cancel:hover:not(:disabled) {
-    background-color: #e2e8f0;
-    color: #0f172a;
+  background-color: #e2e8f0;
+  color: #0f172a;
 }
 
 .btn-danger {
-    background-color: #ef4444;
-    color: white;
-    margin: 0;
-    /* Override voor de zekerheid */
+  background-color: #ef4444;
+  color: white;
+  margin: 0;
+  /* Override for safety */
 }
 
 .btn-danger:hover:not(:disabled) {
-    background-color: #dc2626;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+  background-color: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
 }
 
 .btn-danger:disabled,
 .btn-cancel:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-/* =========================================
-   SLEUTEL / PINCODE MODAL
-   ========================================= */
+/* ══
+   Key / PIN Code Modal
+   ══ */
 
-/* Specifieke styling voor het blauwe icoon om de rode te overschrijven */
+/* Specific styling for the blue icon to override the red default */
 .modal-icon.icon-blue {
-    background-color: rgba(10, 132, 255, 0.1);
-    color: #0a84ff;
+  background-color: rgba(10, 132, 255, 0.1);
+  color: #0a84ff;
 }
 
 .modal-box-alert p.mb-24 {
-    margin-bottom: 24px !important;
+  margin-bottom: 24px !important;
 }
 
-/* --- Laadstatus & Animatie --- */
+/* ══ Loading State & Animation ══ */
 .loading-state {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 32px 0;
-    color: #86868b;
-    font-weight: 500;
-    font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px 0;
+  color: #86868b;
+  font-weight: 500;
+  font-size: 15px;
 }
 
-/* Maakt een strakke Apple-stijl spinner van je dot-typing class */
+/* Creates a clean Apple-style spinner from the dot-typing class */
 .dot-typing {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(10, 132, 255, 0.15);
-    border-top-color: #0a84ff;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(10, 132, 255, 0.15);
+  border-top-color: #0a84ff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-/* --- Weergave van de Pincode --- */
+/* ══ PIN Code Display ══ */
 .pin-display-box {
-    background-color: #f5f5f7;
-    padding: 24px 16px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #e5e5ea;
-    width: 100%;
-    box-sizing: border-box;
+  background-color: #f5f5f7;
+  padding: 24px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #e5e5ea;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .pin-label {
-    font-size: 12px;
-    color: #86868b;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-weight: 600;
-    display: block;
+  font-size: 12px;
+  color: #86868b;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  display: block;
 }
 
 .pin-value {
-    font-size: 46px;
-    font-weight: 700;
-    color: #1d1d1f;
-    letter-spacing: 10px;
-    margin-top: 8px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    /* Monospace lettertype voor codes */
-    text-align: center;
-    margin-right: -10px;
-    /* Compenseert voor de letter-spacing zodat het optisch exact in het midden staat */
+  font-size: 46px;
+  font-weight: 700;
+  color: #1d1d1f;
+  letter-spacing: 10px;
+  margin-top: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* Monospace font for codes */
+  text-align: center;
+  margin-right: -10px;
+  /* Compensates for letter-spacing so it is optically centered */
 }
 
 .modal-box-alert p.pin-instructions {
-    font-size: 14px;
-    color: #86868b;
-    margin: 0 0 32px 0;
-    /* Zorgt voor voldoende ademruimte boven de knop */
-    line-height: 1.5;
+  font-size: 14px;
+  color: #86868b;
+  margin: 0 0 32px 0;
+  /* Ensures sufficient breathing room above the button */
+  line-height: 1.5;
 }
 
-/* --- Knoppen in de modal --- */
+/* ══ Modal Buttons ══ */
 .modal-actions {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .btn-primary.btn-full-width {
-    flex: 1;
-    /* Laat de knop 100% van de flex-container innemen */
-    justify-content: center;
-    margin: 0;
-    /* Voorkomt ongewenste marges */
-    padding: 14px;
-    /* Iets grotere knop voor een premium feel */
-    font-size: 16px;
+  flex: 1;
+  /* Let the button take 100% of the flex container */
+  justify-content: center;
+  margin: 0;
+  /* Prevent unwanted margins */
+  padding: 14px;
+  /* Slightly larger button for a premium feel */
+  font-size: 16px;
 }
 
-
 .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 64px 20px;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 20px;
+  text-align: center;
 }
 
 .empty-state h4 {
-    margin: 16px 0 8px 0;
-    color: #1d1d1f;
-    font-size: 18px;
+  margin: 16px 0 8px 0;
+  color: #1d1d1f;
+  font-size: 18px;
 }
 
 .empty-state p {
-    color: #86868b;
-    font-size: 14px;
-    max-width: 320px;
-    line-height: 1.4;
-    margin-bottom: 24px;
+  color: #86868b;
+  font-size: 14px;
+  max-width: 320px;
+  line-height: 1.4;
+  margin-bottom: 24px;
 }
 
-/* --- SCROLLBAR STYLING --- */
+/* ══ Scrollbar Styling ══ */
 .table-container::-webkit-scrollbar {
   width: 8px;
 }

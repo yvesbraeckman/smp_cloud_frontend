@@ -1,72 +1,124 @@
+<!-- Login page — authenticates administrators and handles the "forgot password" flow -->
+
 <div class="login-container">
-    <div class="logo-container">
-        <img src="/image1.png" alt="Smart Parcel Wall Logo">
+  <!-- ══ Logo & heading ══ -->
+  <div class="logo-container">
+    <img src="/image1.png" alt="Smart Parcel Wall Logo" />
+  </div>
+
+  <h2>Smart Parcel Admin</h2>
+  <p class="subtitle">Log in om de vloot te beheren</p>
+
+  <!-- ══ Error banner ══ -->
+  @if (errorMessage) {
+    <div class="error-box">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="20px"
+        viewBox="0 -960 960 960"
+        width="20px"
+        fill="currentColor"
+        style="flex-shrink: 0"
+      >
+        <path
+          d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+        />
+      </svg>
+      {{ errorMessage }}
+    </div>
+  }
+
+  <!-- ══ Forgot-password success banner ══ -->
+  @if (forgotPasswordMessage) {
+    <div class="error-box" style="background-color: #e5f9eb; color: #34c759">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="20px"
+        viewBox="0 -960 960 960"
+        width="20px"
+        fill="currentColor"
+        style="flex-shrink: 0"
+      >
+        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+      </svg>
+      {{ forgotPasswordMessage }}
+    </div>
+  }
+
+  <!-- ══ Login form ══ -->
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="email">E-mailadres</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="admin@spw.com"
+        [(ngModel)]="email"
+        required
+      />
     </div>
 
-    <h2>Smart Parcel Admin</h2>
-    <p class="subtitle">Log in om de vloot te beheren</p>
+    <div class="form-group">
+      <label for="password">Wachtwoord</label>
+      <div class="password-input-wrapper">
+        <input
+          [type]="isPasswordVisible ? 'text' : 'password'"
+          id="password"
+          name="password"
+          placeholder="••••••••"
+          [(ngModel)]="password"
+          required
+        />
 
-    @if (errorMessage) {
-        <div class="error-box">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor" style="flex-shrink: 0;"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
-            {{ errorMessage }}
-        </div>
-    }
-
-    @if (forgotPasswordMessage) {
-        <div class="error-box" style="background-color: #e5f9eb; color: #34c759;">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor" style="flex-shrink: 0;"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
-            {{ forgotPasswordMessage }}
-        </div>
-    }
-
-    <form (ngSubmit)="onSubmit()">
-        <div class="form-group">
-            <label for="email">E-mailadres</label>
-            <input 
-                type="email" 
-                id="email" 
-                name="email" 
-                placeholder="admin@spw.com"
-                [(ngModel)]="email"
-                required>
-        </div>
-
-        <div class="form-group">
-            <label for="password">Wachtwoord</label>
-            <div class="password-input-wrapper">
-                <input 
-                    [type]="isPasswordVisible ? 'text' : 'password'" 
-                    id="password" 
-                    name="password" 
-                    placeholder="••••••••"
-                    [(ngModel)]="password"
-                    required>
-                
-                <button type="button" class="password-toggle-icon" (click)="togglePasswordVisibility()" [title]="isPasswordVisible ? 'Verberg wachtwoord' : 'Toon wachtwoord'">
-                    @if (isPasswordVisible) {
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
-                            <path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T928-500q-23 59-60.5 109.5T772-302Zm-20 236L590-228q-26 11-54 15.5T480-208q-151 0-269-83.5T16-500q21-53 53-98.5t73-81.5L56-764l56-56 716 716-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/>
-                        </svg>
-                    } @else {
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor">
-                            <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-80q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm0 160q-134 0-233-77T112-500q36-108 135-185t233-77q134 0 233 77t135 185q-36 108-135 185t-233 77Z"/>
-                        </svg>
-                    }
-                </button>
-            </div>
-        </div>
-
-        <button type="submit" class="btn-primary" [disabled]="isLoading">
-            {{ isLoading ? 'Bezig met inloggen...' : 'Inloggen' }}
+        <button
+          type="button"
+          class="password-toggle-icon"
+          (click)="togglePasswordVisibility()"
+          [title]="isPasswordVisible ? 'Verberg wachtwoord' : 'Toon wachtwoord'"
+        >
+          @if (isPasswordVisible) {
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="20px"
+              viewBox="0 -960 960 960"
+              width="20px"
+              fill="currentColor"
+            >
+              <path
+                d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T928-500q-23 59-60.5 109.5T772-302Zm-20 236L590-228q-26 11-54 15.5T480-208q-151 0-269-83.5T16-500q21-53 53-98.5t73-81.5L56-764l56-56 716 716-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"
+              />
+            </svg>
+          } @else {
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="20px"
+              viewBox="0 -960 960 960"
+              width="20px"
+              fill="currentColor"
+            >
+              <path
+                d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-80q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm0 160q-134 0-233-77T112-500q36-108 135-185t233-77q134 0 233 77t135 185q-36 108-135 185t-233 77Z"
+              />
+            </svg>
+          }
         </button>
-    </form>
-
-    <a href="#" class="forgot-password" (click)="$event.preventDefault(); forgotPassword()">Wachtwoord vergeten?</a>
-
-    <div class="footer-info">
-        &copy; 2026 Smart Parcel Wall System<br>
-        v1.0.0
+      </div>
     </div>
-</div>
 
+    <button type="submit" class="btn-primary" [disabled]="isLoading">
+      {{ isLoading ? 'Bezig met inloggen...' : 'Inloggen' }}
+    </button>
+  </form>
+
+  <!-- ══ Forgot-password link ══ -->
+  <a href="#" class="forgot-password" (click)="$event.preventDefault(); forgotPassword()"
+    >Wachtwoord vergeten?</a
+  >
+
+  <!-- ══ Footer ══ -->
+  <div class="footer-info">
+    &copy; 2026 Smart Parcel Wall System<br />
+    v1.0.0
+  </div>
+</div>

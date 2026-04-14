@@ -1,204 +1,298 @@
+<!-- Wall Detail — interactive locker grid with detail panel and admin action modals -->
+
 <app-sidebar></app-sidebar>
 
 <main class="main-content">
-        
-    <header>
-        <div class="header-title-group">            
-            @if (wall) {
-                <h1>{{ wall.name }} - {{wall.location_id}}</h1>
-                <span class="status-badge-header" [ngClass]="wall.status === 'ONLINE' ? 'online' : 'offline'">
-                    <span class="dot"></span> {{ wall.status === 'ONLINE' ? 'Online' : 'Offline' }}
-                </span>
-            } @else if (isLoading) {
-                <h1>Laden...</h1>
-            }
-        </div>
-        @if (wall && !isLoading) {
-        <div class="locker-legend">
-            <div class="legend-item">
-                <span class="legend-color free"></span>
-                <span class="legend-label">Vrij</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-color occupied"></span>
-                <span class="legend-label">Bezet (Levering)</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-color return"></span>
-                <span class="legend-label">Klaar voor Retour</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-color maintenance"></span>
-                <span class="legend-label">Onderhoud</span>
-            </div>
-        </div>
-    }
-    </header>
-
+  <!-- ══ Header & status ══ -->
+  <header>
+    <div class="header-title-group">
+      @if (wall) {
+        <h1>{{ wall.name }} - {{ wall.location_id }}</h1>
+        <span
+          class="status-badge-header"
+          [ngClass]="wall.status === 'ONLINE' ? 'online' : 'offline'"
+        >
+          <span class="dot"></span> {{ wall.status === 'ONLINE' ? 'Online' : 'Offline' }}
+        </span>
+      } @else if (isLoading) {
+        <h1>Laden...</h1>
+      }
+    </div>
     @if (wall && !isLoading) {
-        <div class="wall-wrapper">
-            <div class="locker-grid">
-                
-                @for (locker of wall.lockers; track locker.id) {
-                    <div 
-                        class="locker-cell" 
-                        [ngClass]="[getSizeClass(locker.size), getStatusClass(locker.status), selectedLocker?.id === locker.id ? 'selected' : '']"
-                        (click)="selectLocker(locker)">
-                        
-                        <span class="locker-id">{{ locker.id }}</span>
-                        
-                    </div>
-                }
-                
-            </div>
+      <div class="locker-legend">
+        <div class="legend-item">
+          <span class="legend-color free"></span>
+          <span class="legend-label">Vrij</span>
         </div>
+        <div class="legend-item">
+          <span class="legend-color occupied"></span>
+          <span class="legend-label">Bezet (Levering)</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color return"></span>
+          <span class="legend-label">Klaar voor Retour</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color maintenance"></span>
+          <span class="legend-label">Onderhoud</span>
+        </div>
+      </div>
     }
+  </header>
 
-    @if (selectedLocker) {
-        <aside class="action-panel">
-            <div class="panel-header">
-                <span class="panel-title">Locker {{ selectedLocker.id }}</span>
-                <button class="close-btn" (click)="closePanel()">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
-                </button>
+  <!-- ══ Locker grid ══ -->
+  @if (wall && !isLoading) {
+    <div class="wall-wrapper">
+      <div class="locker-grid">
+        @for (locker of wall.lockers; track locker.id) {
+          <div
+            class="locker-cell"
+            [ngClass]="[
+              getSizeClass(locker.size),
+              getStatusClass(locker.status),
+              selectedLocker?.id === locker.id ? 'selected' : '',
+            ]"
+            (click)="selectLocker(locker)"
+          >
+            <span class="locker-id">{{ locker.id }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ══ Detail & action panel ══ -->
+  @if (selectedLocker) {
+    <aside class="action-panel">
+      <div class="panel-header">
+        <span class="panel-title">Locker {{ selectedLocker.id }}</span>
+        <button class="close-btn" (click)="closePanel()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="currentColor"
+          >
+            <path
+              d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <div class="panel-body">
+        <div class="detail-group">
+          <div class="detail-label">Status</div>
+          <span
+            class="status-tag"
+            [ngClass]="{
+              'tag-occupied': selectedLocker.status === 'Occupied',
+              'tag-return': selectedLocker.status === 'Return',
+              'tag-maintenance': selectedLocker.status === 'Maintenance',
+              'tag-free': selectedLocker.status === 'Available',
+            }"
+          >
+            {{
+              selectedLocker.status === 'Return'
+                ? 'Wacht op koerier'
+                : (selectedLocker.status | titlecase)
+            }}
+          </span>
+        </div>
+
+        <div class="detail-group">
+          <div class="detail-label">Configuratie</div>
+          <div class="detail-value">Formaat {{ selectedLocker.size }}</div>
+        </div>
+
+        <div class="divider"></div>
+
+        @if (lockerDetail) {
+          <div class="detail-group">
+            <div class="detail-label">Huidige Inhoud</div>
+            @if (lockerDetail.parcel_id) {
+              <div class="detail-value">Pakket #PK-{{ lockerDetail.parcel_id }}</div>
+              <div class="detail-subtext">
+                Geleverd: {{ lockerDetail.delivery_time | date: 'dd/MM/yyyy HH:mm' }} <br />
+                Koerier: {{ lockerDetail.courier || 'Onbekend' }}
+              </div>
+            } @else {
+              <div class="detail-value empty-text">Kluis is leeg</div>
+            }
+          </div>
+
+          @if (lockerDetail.resident_name) {
+            <div class="detail-group">
+              <div class="detail-label">Bestemd voor</div>
+              <div class="detail-value">{{ lockerDetail.resident_name }}</div>
+              <div class="detail-subtext">
+                Appartement {{ lockerDetail.resident_unit || 'Onbekend' }}
+              </div>
             </div>
+          }
+        } @else {
+          <p class="detail-subtext">Details laden...</p>
+        }
+      </div>
 
-            <div class="panel-body">
-                
-                <div class="detail-group">
-                    <div class="detail-label">Status</div>
-                    <span class="status-tag" [ngClass]="{
-                        'tag-occupied': selectedLocker.status === 'Occupied',
-                        'tag-return': selectedLocker.status === 'Return',
-                        'tag-maintenance': selectedLocker.status === 'Maintenance',
-                        'tag-free': selectedLocker.status === 'Available'
-                    }">
-                        {{ selectedLocker.status === 'Return' ? 'Wacht op koerier' : (selectedLocker.status | titlecase) }}
-                    </span>
-                </div>
+      <div class="actions-footer">
+        <button
+          type="button"
+          class="btn-action btn-force"
+          [disabled]="wall?.status !== 'ONLINE'"
+          (click)="$event.stopPropagation(); promptForceOpen()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="20px"
+            viewBox="0 -960 960 960"
+            width="20px"
+            fill="currentColor"
+          >
+            <path
+              d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"
+            />
+          </svg>
+          Geforceerd Openen
+        </button>
 
-                <div class="detail-group">
-                    <div class="detail-label">Configuratie</div>
-                    <div class="detail-value">Formaat {{ selectedLocker.size }}</div>
-                </div>
+        <button
+          type="button"
+          class="btn-action btn-maint"
+          [disabled]="wall?.status !== 'ONLINE'"
+          (click)="$event.stopPropagation(); promptMaintenance()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="20px"
+            viewBox="0 -960 960 960"
+            width="20px"
+            fill="currentColor"
+          >
+            <path
+              d="M742-132 546-328q-36 12-73.5 16T396-312q-119 0-202.5-83.5T110-598q0-46 13-88.5t38-79.5l194 194 113-113-194-194q37-25 79.5-38t88.5-13q119 0 202.5 83.5T828-444q0 40-4 77.5T812-293L912-193q11 11 11 28t-11 28l-84 84q-11 11-28 11t-28-11ZM662-588q21 0 36.5-15.5T714-640q0-21-15.5-36.5T662-692q-21 0-36.5 15.5T610-640q0 21 15.5 36.5T662-588Z"
+            />
+          </svg>
+          {{ selectedLocker.status === 'Maintenance' ? 'Uit onderhoud halen' : 'Zet in Onderhoud' }}
+        </button>
 
-                <div class="divider"></div>
-
-                @if (lockerDetail) {
-                    
-                    <div class="detail-group">
-                        <div class="detail-label">Huidige Inhoud</div>
-                        @if (lockerDetail.parcel_id) {
-                            <div class="detail-value">Pakket #PK-{{ lockerDetail.parcel_id }}</div>
-                            <div class="detail-subtext">
-                                Geleverd: {{ lockerDetail.delivery_time | date:'dd/MM/yyyy HH:mm' }} <br>
-                                Koerier: {{ lockerDetail.courier || 'Onbekend' }}
-                            </div>
-                        } @else {
-                            <div class="detail-value empty-text">Kluis is leeg</div>
-                        }
-                    </div>
-
-                    @if (lockerDetail.resident_name) {
-                        <div class="detail-group">
-                            <div class="detail-label">Bestemd voor</div>
-                            <div class="detail-value">{{ lockerDetail.resident_name }}</div>
-                            <div class="detail-subtext">Appartement {{ lockerDetail.resident_unit || 'Onbekend' }}</div>
-                        </div>
-                    }
-
-                } @else {
-                    <p class="detail-subtext">Details laden...</p>
-                }
-            </div>
-            
-            <div class="actions-footer">
-                <button type="button" class="btn-action btn-force" 
-                        [disabled]="wall?.status !== 'ONLINE'"
-                        (click)="$event.stopPropagation(); promptForceOpen()">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg>
-                    Geforceerd Openen
-                </button>
-                
-                <button type="button" class="btn-action btn-maint" 
-                        [disabled]="wall?.status !== 'ONLINE'"
-                        (click)="$event.stopPropagation(); promptMaintenance()">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M742-132 546-328q-36 12-73.5 16T396-312q-119 0-202.5-83.5T110-598q0-46 13-88.5t38-79.5l194 194 113-113-194-194q37-25 79.5-38t88.5-13q119 0 202.5 83.5T828-444q0 40-4 77.5T812-293L912-193q11 11 11 28t-11 28l-84 84q-11 11-28 11t-28-11ZM662-588q21 0 36.5-15.5T714-640q0-21-15.5-36.5T662-692q-21 0-36.5 15.5T610-640q0 21 15.5 36.5T662-588Z"/></svg>
-                    {{ selectedLocker.status === 'Maintenance' ? 'Uit onderhoud halen' : 'Zet in Onderhoud' }}
-                </button>
-
-                @if (wall?.status !== 'ONLINE') {
-                    <div class="offline-warning-text">
-                        Acties niet beschikbaar omdat kluiswand offline is.
-                    </div>
-                }
-            </div>
-        </aside>
-    }
+        @if (wall?.status !== 'ONLINE') {
+          <div class="offline-warning-text">
+            Acties niet beschikbaar omdat kluiswand offline is.
+          </div>
+        }
+      </div>
+    </aside>
+  }
 </main>
+
+<!-- ══ Force-open confirmation modal ══ -->
 @if (showForceOpenModal) {
-    <div class="modal-overlay" (click)="cancelForceOpen()">
-        <div class="modal-box" (click)="$event.stopPropagation()">
-            <div class="modal-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="currentColor"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg>
-            </div>
-            
-            <h3>Geforceerd Openen</h3>
-            <p>Weet je zeker dat je kluisje <strong>{{ selectedLocker?.id }}</strong> wilt forceren? De deur zal direct fysiek openspringen.</p>
-            
-            <div class="modal-actions">
-                <button class="btn-cancel" (click)="cancelForceOpen()">Annuleren</button>
-                <button class="btn-danger" (click)="confirmForceOpen()">Ja, openen</button>
-            </div>
-        </div>
+  <div class="modal-overlay" (click)="cancelForceOpen()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="28px"
+          viewBox="0 -960 960 960"
+          width="28px"
+          fill="currentColor"
+        >
+          <path
+            d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"
+          />
+        </svg>
+      </div>
+
+      <h3>Geforceerd Openen</h3>
+      <p>
+        Weet je zeker dat je kluisje <strong>{{ selectedLocker?.id }}</strong> wilt forceren? De
+        deur zal direct fysiek openspringen.
+      </p>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="cancelForceOpen()">Annuleren</button>
+        <button class="btn-danger" (click)="confirmForceOpen()">Ja, openen</button>
+      </div>
     </div>
+  </div>
 }
 
+<!-- ══ Maintenance confirmation modal ══ -->
 @if (showMaintenanceModal) {
-    <div class="modal-overlay" (click)="cancelMaintenance()">
-        <div class="modal-box" (click)="$event.stopPropagation()">
-            <div class="modal-icon maintenance-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28px" height="28px" fill="currentColor">
-                    <path d="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
-                </svg>
-            </div>
-           
-            <h3>{{ selectedLocker?.status === 'Maintenance' ? 'Uit Onderhoud Halen' : 'In Onderhoud Zetten' }}</h3>
+  <div class="modal-overlay" (click)="cancelMaintenance()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-icon maintenance-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="28px"
+          height="28px"
+          fill="currentColor"
+        >
+          <path d="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+        </svg>
+      </div>
 
-            <p>
-                Wil je de status van kluisje <strong>{{ selectedLocker?.id }}</strong> wijzigen? 
-                @if (selectedLocker?.status === 'Maintenance') {
-                    Bewoners kunnen dit kluisje hierna weer normaal gebruiken.
-                } @else {
-                    Bewoners kunnen dit kluisje tijdelijk niet gebruiken.
-                }
-            </p>
-            <div class="modal-actions">
-                <button class="btn-cancel" (click)="cancelMaintenance()">Annuleren</button>
-                <button class="btn-warning" (click)="confirmMaintenance()">Bevestigen</button>
-            </div>
-        </div>
+      <h3>
+        {{
+          selectedLocker?.status === 'Maintenance' ? 'Uit Onderhoud Halen' : 'In Onderhoud Zetten'
+        }}
+      </h3>
+
+      <p>
+        Wil je de status van kluisje <strong>{{ selectedLocker?.id }}</strong> wijzigen?
+        @if (selectedLocker?.status === 'Maintenance') {
+          Bewoners kunnen dit kluisje hierna weer normaal gebruiken.
+        } @else {
+          Bewoners kunnen dit kluisje tijdelijk niet gebruiken.
+        }
+      </p>
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="cancelMaintenance()">Annuleren</button>
+        <button class="btn-warning" (click)="confirmMaintenance()">Bevestigen</button>
+      </div>
     </div>
+  </div>
 }
 
+<!-- ══ Action result modal (success or error) ══ -->
 @if (showResultModal) {
-    <div class="modal-overlay" (click)="closeResultModal()">
-        <div class="modal-box" (click)="$event.stopPropagation()">
-            
-            <div class="modal-icon" [ngClass]="isErrorResult ? 'error-icon' : 'success-icon'">
-                @if (isErrorResult) {
-                    <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="currentColor"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
-                } @else {
-                    <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="currentColor"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
-                }
-            </div>
-            
-            <h3>{{ resultTitle }}</h3>
-            <p>{{ resultMessage }}</p>
-            
-            <div class="modal-actions">
-                <button class="btn-primary-modal" (click)="closeResultModal()">Begrepen</button>
-            </div>
-        </div>
+  <div class="modal-overlay" (click)="closeResultModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-icon" [ngClass]="isErrorResult ? 'error-icon' : 'success-icon'">
+        @if (isErrorResult) {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="28px"
+            viewBox="0 -960 960 960"
+            width="28px"
+            fill="currentColor"
+          >
+            <path
+              d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+            />
+          </svg>
+        } @else {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="28px"
+            viewBox="0 -960 960 960"
+            width="28px"
+            fill="currentColor"
+          >
+            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+          </svg>
+        }
+      </div>
+
+      <h3>{{ resultTitle }}</h3>
+      <p>{{ resultMessage }}</p>
+
+      <div class="modal-actions">
+        <button class="btn-primary-modal" (click)="closeResultModal()">Begrepen</button>
+      </div>
     </div>
+  </div>
 }

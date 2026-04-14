@@ -1,212 +1,206 @@
-/* --- BASIS SIDEBAR STYLES --- */
+/* ══ Host & Sidebar Shell ══ */
 :host {
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 10000;
 }
 
 .sidebar {
-    width: 260px;
-    background-color: #1c1c1e; /* Apple macOS Dark achtergrond */
-    border-right: 1px solid #2c2c2e; /* Subtiele scheidingslijn */
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    /* Forceert het Apple lettertype (San Francisco) op Mac/iOS, anders een strakke fallback */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  width: 260px;
+  background-color: #1c1c1e; 
+  border-right: 1px solid #2c2c2e;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* ══ Logo / Brand Area ══ */
 .logo-area {
-    height: 70px;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: #ffffff;
-    border-bottom: 1px solid #2c2c2e;
-    margin-bottom: 24px;
-    text-decoration: none; /* DIT VERWIJDERT DE LELIJKE ONDERSTREPING */
-    transition: opacity 0.2s ease; /* Zorgt voor een vloeiende overgang */
+  height: 70px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  border-bottom: 1px solid #2c2c2e;
+  margin-bottom: 24px;
+  text-decoration: none; 
+  transition: opacity 0.2s ease;
 }
 
-/* Klein extraatje: subtiel oplichten als je met de muis over het logo gaat */
+/* Subtle hover effect on the logo */
 .logo-area:hover {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
+/* ══ Navigation Links ══ */
 .nav-links {
-    flex-grow: 1;
-    padding: 0 16px; /* Padding rondom de hele lijst voor de 'zwevende' knoppen */
+  flex-grow: 1;
+  padding: 0 16px;
 }
 
-/* Subtiel labeltje boven de menu-items */
+/* Section label above nav items */
 .nav-section-title {
-    font-size: 11px;
-    font-weight: 600;
-    color: #86868b;
-    letter-spacing: 0.5px;
-    margin: 0 0 8px 8px;
-    text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 600;
+  color: #86868b;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px 8px;
+  text-transform: uppercase;
 }
 
 .nav-links a {
-    display: block;
-    padding: 10px 14px;
-    color: #a1a1a6; /* Zachtgrijs voor rustige uitstraling */
-    text-decoration: none;
-    margin-bottom: 4px;
-    border-radius: 8px; /* De klassieke Apple afronding */
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  display: block;
+  padding: 10px 14px;
+  color: #a1a1a6;
+  text-decoration: none;
+  margin-bottom: 4px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .nav-links a:hover {
-    background-color: #2c2c2e; /* Donkergrijs zweef-effect */
-    color: #ffffff;
+  background-color: #2c2c2e;
+  color: #ffffff;
 }
 
 .nav-links a.active {
-    background-color: #0a84ff; /* De iconische Apple accentkleur (blauw) */
-    color: #ffffff;
-    font-weight: 600;
-    box-shadow: 0 2px 10px rgba(10, 132, 255, 0.25); /* Subtiele gloed achter de knop */
+  background-color: #0a84ff; 
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(10, 132, 255, 0.25); 
 }
 
-/* --- UITLOGGEN (FOOTER) --- */
+/* ══ Logout Footer ══ */
 .nav-footer {
-    padding: 16px;
-    border-top: 1px solid #2c2c2e;
+  padding: 16px;
+  border-top: 1px solid #2c2c2e;
 }
 
 .logout-link {
-    display: flex;
-    align-items: center;
-    padding: 10px 14px;
-    color: #ff453a; /* Apple waarschuwings-rood */
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  color: #ff453a; 
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .logout-link:hover {
-    background-color: rgba(255, 69, 58, 0.1); /* Subtiele rode gloed als achtergrond */
+  background-color: rgba(255, 69, 58, 0.1); 
 }
 
-/* --- HIERONDER LAAT JE JOUW BESTAANDE .modal-overlay, .modal-box ETC. STAAN --- */
-
-/* --- PREMIUM MODAL STYLES --- */
+/* ══ Logout Confirmation Modal ══ */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    /* Pakt de hele breedte van je browser */
-    height: 100vh;
-    /* Pakt de hele hoogte van je browser */
-    background-color: rgba(15, 23, 42, 0.6);
-    /* Mooie donkere slate-tint */
-    backdrop-filter: blur(4px);
-    /* Maakt de pagina erachter chique wazig */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    /* Zorgt dat hij 100% zeker over alles heen ligt */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; 
 }
 
 .modal-box {
-    background: #ffffff;
-    padding: 32px;
-    border-radius: 16px;
-    /* Modernere, rondere hoeken */
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 16px; 
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .modal-icon {
-    background-color: #fee2e2;
-    color: #ef4444;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px auto;
+  background-color: #fee2e2;
+  color: #ef4444;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px auto;
 }
 
 .modal-box h3 {
-    margin: 0 0 10px 0;
-    color: #1e293b;
-    font-size: 22px;
-    font-weight: 700;
+  margin: 0 0 10px 0;
+  color: #1e293b;
+  font-size: 22px;
+  font-weight: 700;
 }
 
 .modal-box p {
-    color: #64748b;
-    margin: 0 0 28px 0;
-    font-size: 15px;
-    line-height: 1.5;
+  color: #64748b;
+  margin: 0 0 28px 0;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
+/* ══ Modal Action Buttons ══ */
 .modal-actions {
-    display: flex;
-    gap: 12px;
+  display: flex;
+  gap: 12px;
 }
 
 .btn-cancel,
 .btn-danger {
-    flex: 1;
-    /* Zorgt dat beide knoppen exact even breed zijn */
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn-cancel {
-    background-color: #f1f5f9;
-    color: #475569;
+  background-color: #f1f5f9;
+  color: #475569;
 }
 
 .btn-cancel:hover {
-    background-color: #e2e8f0;
-    color: #0f172a;
+  background-color: #e2e8f0;
+  color: #0f172a;
 }
 
 .btn-danger {
-    background-color: #ef4444;
-    color: white;
+  background-color: #ef4444;
+  color: white;
 }
 
 .btn-danger:hover {
-    background-color: #dc2626;
-    transform: translateY(-1px);
-    /* Subtiel lift-effectje bij hover */
-    box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+  background-color: #dc2626;
+  transform: translateY(-1px); 
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
 }
 
-/* Een vloeiende, Apple-achtige bounce animatie */
+/* Smooth bounce animation */
 @keyframes modalScaleUp {
-    0% {
-        transform: scale(0.95) translateY(10px);
-        opacity: 0;
-    }
+  0% {
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+  }
 
-    100% {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-    }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
 }

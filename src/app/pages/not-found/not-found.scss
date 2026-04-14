@@ -1,88 +1,88 @@
-/* --- BASIS LAYOUT --- */
+/* ══ Base Layout ══ */
 .not-found-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100vw;
-    background-color: #f5f5f7; /* Apple lichte achtergrond */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-    box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f5f5f7; /* Apple-style light background */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .not-found-content {
-    max-width: 500px;
-    animation: fadeIn 0.5s ease-out;
+  max-width: 500px;
+  animation: fadeIn 0.5s ease-out;
 }
 
-/* --- TYPOGRAFIE --- */
+/* ══ Typography ══ */
 .error-code {
-    font-size: 140px;
-    font-weight: 800;
-    color: #d1d1d6; /* Zachtgrijs zodat het niet schreeuwt */
-    margin: 0;
-    letter-spacing: -4px; /* Strakkere cijfers */
-    line-height: 1;
+  font-size: 140px;
+  font-weight: 800;
+  color: #d1d1d6; /* Soft grey so it doesn't overpower */
+  margin: 0;
+  letter-spacing: -4px; /* Tighter numerals */
+  line-height: 1;
 }
 
 .error-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: #1d1d1f; /* Apple's off-black */
-    margin: 16px 0 12px 0;
-    letter-spacing: -0.5px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1d1d1f; /* Apple's off-black */
+  margin: 16px 0 12px 0;
+  letter-spacing: -0.5px;
 }
 
 .error-description {
-    font-size: 17px;
-    line-height: 1.47059;
-    font-weight: 400;
-    color: #86868b; /* Secundaire tekstkleur */
-    margin: 0 0 32px 0;
+  font-size: 17px;
+  line-height: 1.47059;
+  font-weight: 400;
+  color: #86868b; /* Secondary text colour */
+  margin: 0 0 32px 0;
 }
 
-/* --- KNOPPEN --- */
+/* ══ Call-to-action Button ══ */
 .action-row {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .apple-btn {
-    display: inline-block;
-    padding: 12px 24px;
-    border-radius: 980px; /* Volledig ronde pill-shape zoals op Apple.com */
-    font-size: 17px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    text-decoration: none;
-    transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
-    
-    &.primary {
-        background-color: #0071e3; /* Het officiële Apple blauw */
-        color: white;
-        
-        &:hover { 
-            background-color: #0077ed; 
-            transform: scale(1.02);
-        }
-        
-        &:active {
-            transform: scale(0.98);
-        }
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 980px; /* Full pill-shape like Apple.com */
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  &.primary {
+    background-color: #0071e3; /* The official Apple blue */
+    color: white;
+
+    &:hover {
+      background-color: #0077ed;
+      transform: scale(1.02);
     }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
 }
 
-/* --- ANIMATIE --- */
+/* ══ Animation ══ */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

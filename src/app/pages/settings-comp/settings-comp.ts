@@ -4,6 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../sidebar/sidebar';
 import { Fleet } from '../../services/fleet';
 
+/**
+ * Settings page component for the currently authenticated admin.
+ *
+ * Provides three sections:
+ * 1. **Personal details** — edit name, email, phone.
+ * 2. **Security** — change password (current + new + confirm).
+ * 3. **Admin management** — list, create, and delete other admin accounts
+ *    (only visible to superadmins).
+ */
 @Component({
   selector: 'app-settings-comp',
   imports: [CommonModule, FormsModule, Sidebar],
@@ -11,55 +20,65 @@ import { Fleet } from '../../services/fleet';
   styleUrl: './settings-comp.scss',
 })
 export class SettingsComp {
-  // Profiel Data
+  // ── Profile data ────────────────────────────────────────────────────
+
   myProfile = { id: 0, name: '', email: '', phone: '', role: '' };
   isSavingProfile = false;
   profileMessage = '';
 
-  // Wachtwoord Data
+  // ── Password data ───────────────────────────────────────────────────
+
   passwords = { current: '', new: '', confirm: '' };
   isSavingPassword = false;
   passwordMessage = '';
   passwordError = '';
 
-  // Beheerders (Lijst)
+  // ── Admin list ───────────────────────────────────────────────────────
+
   admins: any[] = [];
   isLoadingAdmins = true;
 
-  // Modal State
+  // ── Add-admin modal state ───────────────────────────────────────────
+
   showAddModal = false;
   isSavingNewAdmin = false;
   newAdmin = { name: '', email: '', phone: '', password: '', role: 'admin' };
   adminErrorMessage = '';
 
-  // Modal State voor Verwijderen
+  // ── Delete-admin modal state ────────────────────────────────────────
+
   showDeleteModal = false;
   adminToDelete: any = null;
   isDeletingAdmin = false;
 
-  constructor(private fleetService: Fleet, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private fleetService: Fleet,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.loadMyProfile();
     this.loadAdmins();
   }
 
+  /** Fetch the current admin's profile from the backend. */
   loadMyProfile(): void {
     this.fleetService.getCurrentAdmin().subscribe({
       next: (data) => {
-        this.myProfile = { 
-          id: data.id,           // <-- Deze is erbij gekomen!
-          name: data.name, 
-          email: data.email, 
+        this.myProfile = {
+          id: data.id,
+          name: data.name,
+          email: data.email,
           phone: data.phone || '',
-          role: data.role // <-- Deze is nieuw!
+          role: data.role,
         };
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Fout bij laden profiel', err)
+      error: (err) => console.error('Fout bij laden profiel', err),
     });
   }
 
+  /** Save updated personal details for the current admin. */
   saveProfile(): void {
     this.isSavingProfile = true;
     this.profileMessage = '';
@@ -67,16 +86,22 @@ export class SettingsComp {
       next: () => {
         this.isSavingProfile = false;
         this.profileMessage = 'Profiel succesvol bijgewerkt.';
-        setTimeout(() => this.profileMessage = '', 3000);
+        setTimeout(() => (this.profileMessage = ''), 3000);
         this.cdr.detectChanges();
       },
       error: () => {
         this.isSavingProfile = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
+  /**
+   * Submit a password change request.
+   *
+   * Validates that the new password and confirmation match before
+   * sending the request. On success the password fields are cleared.
+   */
   savePassword(): void {
     this.passwordError = '';
     this.passwordMessage = '';
@@ -85,26 +110,29 @@ export class SettingsComp {
       return;
     }
     this.isSavingPassword = true;
-    
-    this.fleetService.updatePassword({
-      current_password: this.passwords.current,
-      new_password: this.passwords.new
-    }).subscribe({
-      next: () => {
-        this.isSavingPassword = false;
-        this.passwords = { current: '', new: '', confirm: '' };
-        this.passwordMessage = 'Wachtwoord succesvol gewijzigd.';
-        setTimeout(() => this.passwordMessage = '', 3000);
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        this.isSavingPassword = false;
-        this.passwordError = err.error?.detail || 'Fout bij wijzigen wachtwoord.';
-        this.cdr.detectChanges();
-      }
-    });
+
+    this.fleetService
+      .updatePassword({
+        current_password: this.passwords.current,
+        new_password: this.passwords.new,
+      })
+      .subscribe({
+        next: () => {
+          this.isSavingPassword = false;
+          this.passwords = { current: '', new: '', confirm: '' };
+          this.passwordMessage = 'Wachtwoord succesvol gewijzigd.';
+          setTimeout(() => (this.passwordMessage = ''), 3000);
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          this.isSavingPassword = false;
+          this.passwordError = err.error?.detail || 'Fout bij wijzigen wachtwoord.';
+          this.cdr.detectChanges();
+        },
+      });
   }
 
+  /** Fetch the list of all admin accounts. */
   loadAdmins(): void {
     this.isLoadingAdmins = true;
     this.fleetService.getAdmins().subscribe({
@@ -116,20 +144,23 @@ export class SettingsComp {
       error: () => {
         this.isLoadingAdmins = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
+  /** Open the modal for adding a new admin account. */
   openAddAdminModal(): void {
     this.newAdmin = { name: '', email: '', phone: '', password: '', role: 'admin' };
     this.adminErrorMessage = '';
     this.showAddModal = true;
   }
 
+  /** Close the add-admin modal. */
   closeModal(): void {
     this.showAddModal = false;
   }
 
+  /** Submit the new admin form after validating required fields. */
   submitNewAdmin(): void {
     if (!this.newAdmin.name || !this.newAdmin.email || !this.newAdmin.password) {
       this.adminErrorMessage = 'Naam, email en wachtwoord zijn verplicht.';
@@ -146,23 +177,23 @@ export class SettingsComp {
         this.isSavingNewAdmin = false;
         this.adminErrorMessage = err.error?.detail || 'Fout bij toevoegen.';
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
-  // Triggert de pop-up
+  /** Open the delete-confirmation modal for a specific admin. */
   deleteAdmin(admin: any): void {
     this.adminToDelete = admin;
     this.showDeleteModal = true;
   }
 
-  // Sluit de pop-up zonder te verwijderen
+  /** Close the delete-confirmation modal without deleting. */
   cancelDeleteAdmin(): void {
     this.showDeleteModal = false;
     this.adminToDelete = null;
   }
 
-  // Voert de daadwerkelijke verwijdering uit
+  /** Permanently delete the selected admin account. */
   confirmDeleteAdmin(): void {
     if (!this.adminToDelete) return;
 
@@ -171,17 +202,22 @@ export class SettingsComp {
       next: () => {
         this.isDeletingAdmin = false;
         this.cancelDeleteAdmin();
-        this.loadAdmins(); // Ververs de tabel
+        this.loadAdmins(); // Refresh the admin list
       },
       error: (err) => {
         this.isDeletingAdmin = false;
         alert('Kon beheerder niet verwijderen: ' + (err.error?.detail || 'Onbekende fout'));
         this.cancelDeleteAdmin();
-      }
+      },
     });
   }
 
-  // Voeg deze functie toe ergens in je SettingsComp class:
+  /**
+   * Derive initials from a name for the avatar circle.
+   *
+   * Takes the first letter of each word (max two), or the first
+   * two characters of a single-word name.
+   */
   getInitials(name: string): string {
     if (!name) return 'A';
     const parts = name.split(' ');
